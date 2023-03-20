@@ -1,0 +1,12 @@
+apiVersion: kapp.k14s.io/v1alpha1
+kind: Config
+
+minimumRequiredVersion: 0.50.0
+
+rebaseRules:
+- path: [spec, paused]
+  type: copy
+  sources: [new, existing]
+  resourceMatchers:
+  - apiVersionKindMatcher: {apiVersion: packaging.carvel.dev/v1alpha1, kind: PackageInstall}
+  - apiVersionKindMatcher: {apiVersion: kappctrl.k14s.io/v1alpha1, kind: App}

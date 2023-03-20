@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("knative-serving"):
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: knative-serving
+  namespace: #@ data.values.packages.namespace
+  annotations:
+    kapp.k14s.io/change-group: knative-serving
+    kapp.k14s.io/change-rule.contour: upsert after upserting contour
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: knative-serving.packages.kadras.io
+    versionSelection:
+      constraints: 1.9.2+kadras.1
+  values:
+    - secretRef:
+        name: knative-serving-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+  namespace: #@ data.values.packages.namespace
+stringData:
+  values.yaml: #@ yaml.encode(data.values.knative.serving)
+
+#@ end

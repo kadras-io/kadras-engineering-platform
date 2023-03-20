@@ -1,0 +1,11 @@
+name: Test
+
+on:
+  - push
+
+jobs:
+  test-config:
+    name: Configuration Tests
+    permissions:
+      contents: read
+    uses: kadras-io/github-reusable-workflows/.github/workflows/carvel-package-test-config.yml@main

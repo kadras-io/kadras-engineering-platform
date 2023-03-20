@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("metrics-server"):
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: metrics-server
+  namespace: #@ data.values.packages.namespace
+  annotations:
+    kapp.k14s.io/change-group: metrics-server
+    kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: metrics-server.packages.kadras.io
+    versionSelection:
+      constraints: 0.6.2+kadras.2
+      prereleases: {}
+  values:
+  - secretRef:
+      name: metrics-server-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: metrics-server-values
+  namespace: #@ data.values.packages.namespace
+stringData:
+  values.yaml: #@ yaml.encode(data.values.metrics_server)
+
+#@ end

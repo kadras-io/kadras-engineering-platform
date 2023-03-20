@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("spring-boot-conventions"):
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: spring-boot-conventions
+  namespace: #@ data.values.packages.namespace
+  annotations:
+    kapp.k14s.io/change-group: spring-boot-conventions
+    kapp.k14s.io/change-rule.spring-boot-conventions: upsert after upserting cartographer
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: spring-boot-conventions.packages.kadras.io
+    versionSelection:
+      constraints: 0.2.0
+  values:
+    - secretRef:
+        name: spring-boot-conventions-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: spring-boot-conventions-values
+  namespace: #@ data.values.packages.namespace
+stringData:
+  values.yaml: #@ yaml.encode(data.values.conventions.spring_boot)
+
+#@ end

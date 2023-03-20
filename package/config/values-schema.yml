@@ -1,0 +1,76 @@
+#@data/values-schema
+
+---
+
+#@schema/desc "Configuration for the platform packages."
+packages:
+  #@schema/desc "The namespace where to install the platform."
+  namespace: ""
+  #@schema/desc "A list of packages to exclude from being installed."
+  excluded:
+    - ""
+
+#@schema/desc "Configuration for Buildpacks related packages."
+buildpacks:
+  #@schema/desc "Configuration for the Buildpacks Catalog package."
+  #@schema/type any=True
+  catalog: {}
+  #@schema/desc "Configuration for the Kpack package."
+  #@schema/type any=True
+  kpack: {}
+
+#@schema/desc "Configuration for Cartographer related packages."
+cartographer:
+  #@schema/desc "Configuration for the Cartographer Blueprints package."
+  #@schema/type any=True
+  blueprints: {}
+  #@schema/desc "Configuration for the Cartographer Delivery package."
+  #@schema/type any=True
+  delivery: {}
+  #@schema/desc "Configuration for the Cartographer Supply Chains package."
+  #@schema/type any=True
+  supply_chains: {}
+
+#@schema/desc "Configuration for the Cert Manager package."
+#@schema/type any=True
+cert_manager: {}
+
+#@schema/desc "Configuration for the Contour package."
+#@schema/type any=True
+contour: {}
+
+#@schema/desc "Configuration for Cartographer Conventions related packages."
+conventions:
+  #@schema/desc "Configuration for the Spring Boot Conventions package."
+  #@schema/type any=True
+  spring_boot: {}
+
+#@schema/desc "Configuration for Flux related packages."
+flux:
+  #@schema/desc "Configuration for the FluxCD Source Controller package."
+  #@schema/type any=True
+  source_controller: {}
+
+#@schema/desc "Configuration for Knative related packages."
+knative:
+  #@schema/desc "Configuration for the Knative Serving package."
+  #@schema/type any=True
+  serving: {}
+
+#@schema/desc "Configuration for the Metrics Server package."
+#@schema/type any=True
+metrics_server: {}
+
+#@schema/desc "Configuration for the Namespace Setup package."
+#@schema/type any=True
+namespace_setup: {}
+
+#@schema/desc "Configuration for the Secretgen Controller package."
+#@schema/type any=True
+secretgen_controller: {}
+
+#@schema/desc "Configuration for Tekton related packages."
+tekton:
+  #@schema/desc "Configuration for the Tekton Pipelines package."
+  #@schema/type any=True
+  pipelines: {}

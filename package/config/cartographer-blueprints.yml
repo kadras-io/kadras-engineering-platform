@@ -1,0 +1,37 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("cartographer-blueprints"):
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cartographer-blueprints
+  namespace: #@ data.values.packages.namespace
+  annotations:
+    kapp.k14s.io/change-group: cartographer-blueprints
+    kapp.k14s.io/change-rule.cartographer: upsert after upserting cartographer
+    kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
+    kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: cartographer-blueprints.packages.kadras.io
+    versionSelection:
+      constraints: 0.4.0
+      prereleases: {}
+  values:
+  - secretRef:
+      name: cartographer-blueprints-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cartographer-blueprints-values
+  namespace: #@ data.values.packages.namespace
+stringData:
+  values.yaml: #@ yaml.encode(data.values.cartographer.blueprints)
+
+#@ end

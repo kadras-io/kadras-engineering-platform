@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("tekton-pipelines"):
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: tekton-pipelines
+  namespace: #@ data.values.packages.namespace
+  annotations:
+    kapp.k14s.io/change-group: tekton-pipelines
+    kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: tekton-pipelines.packages.kadras.io
+    versionSelection:
+      constraints: 0.45.0+kadras.1
+      prereleases: {}
+  values:
+  - secretRef:
+      name: tekton-pipelines-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tekton-pipelines-values
+  namespace: #@ data.values.packages.namespace
+stringData:
+  values.yaml: #@ yaml.encode(data.values.tekton.pipelines)
+
+#@ end
