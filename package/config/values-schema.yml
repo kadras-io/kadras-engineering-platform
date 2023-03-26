@@ -71,6 +71,9 @@ secretgen_controller: {}
 
 #@schema/desc "Configuration for Tekton related packages."
 tekton:
+  #@schema/desc "Configuration for the Tekton Catalog package."
+  #@schema/type any=True
+  catalog: {}
   #@schema/desc "Configuration for the Tekton Pipelines package."
   #@schema/type any=True
   pipelines: {}

@@ -111,6 +111,7 @@ The Engineering Platform package has the following configurable properties.
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
 | `namespace_setup` | `{}` | Configuration for the Namespace Setup package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
+| `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |
 | `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
 
 </details>
