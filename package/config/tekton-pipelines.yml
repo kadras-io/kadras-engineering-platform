@@ -18,7 +18,7 @@ spec:
   packageRef:
     refName: tekton-pipelines.packages.kadras.io
     versionSelection:
-      constraints: 0.45.0+kadras.1
+      constraints: 0.46.0+kadras.1
       prereleases: {}
   values:
   - secretRef:

@@ -20,7 +20,7 @@ spec:
   packageRef:
     refName: cartographer-supply-chains.packages.kadras.io
     versionSelection:
-      constraints: 0.4.0
+      constraints: 0.5.0
       prereleases: {}
   values:
   - secretRef:
