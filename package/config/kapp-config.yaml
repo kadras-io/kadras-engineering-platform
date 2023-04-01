@@ -1,12 +1,38 @@
+---
 apiVersion: kapp.k14s.io/v1alpha1
 kind: Config
 
 minimumRequiredVersion: 0.50.0
 
+#! Rebase rules explicitly define how kapp should merge resources during an update.
+#! See more about the resource merge method: https://carvel.dev/kapp/docs/latest/merge-method.
 rebaseRules:
+
+#! Kubernetes automatically fills in the rules of aggregated ClusterRoles.
+#! We want to keep that configuration between upgrades.
+- path: [rules]
+  type: copy
+  sources: [existing]
+  resourceMatchers:
+  - apiVersionKindMatcher:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+
+#! If the synchronization of a PackageInstall or App resource has been manually paused.
 - path: [spec, paused]
   type: copy
   sources: [new, existing]
   resourceMatchers:
   - apiVersionKindMatcher: {apiVersion: packaging.carvel.dev/v1alpha1, kind: PackageInstall}
   - apiVersionKindMatcher: {apiVersion: kappctrl.k14s.io/v1alpha1, kind: App}
+
+#! These rules define which fields should be removed before kapp performs a diff against the last applied resource.
+diffAgainstLastAppliedFieldExclusionRules:
+
+- path: [metadata, annotations]
+  type: copy
+  sources: [existing]
+  resourceMatchers:
+  - apiVersionKindMatcher:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
