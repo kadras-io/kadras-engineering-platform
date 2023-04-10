@@ -124,7 +124,8 @@ Each Kadras package included in the platform can be configured independently.
 | `cartographer.blueprints` | `{}` | Configuration for the Cartographer Blueprints package. |
 | `cartographer.delivery` | `{}` | Configuration for the Cartographer Delivery package. |
 | `cartographer.supply_chains` | `{}` | Configuration for the Cartographer Supply Chains package. |
-| `cert_manager` | `{}` | Configuration for the Cert Manager package. |
+| `cert_manager.core` | `{}` | Configuration for the Cert Manager package. |
+| `cert_manager.issuers` | `{}` | Configuration for the Cert Manager Issuers package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `conventions.spring_boot` | `{}` | Configuration for the Spring Boot Conventions package. |
 | `flux.source_controller` | `{}` | Configuration for the FluxCD Source Controller package. |
