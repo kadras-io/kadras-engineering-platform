@@ -1,14 +1,31 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("cartographer"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "ca_cert_data": ""
+#@   }
+#@
+#@   if data.values.cartographer.core:
+#@     values.update(struct.decode(data.values.cartographer.core))
+#@   end
+#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.cartographer.core, "ca_cert_data") or not data.values.cartographer.core.ca_cert_data):
+#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: cartographer
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: cartographer
     kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
@@ -18,7 +35,18 @@ spec:
   packageRef:
     refName: cartographer.packages.kadras.io
     versionSelection:
-      constraints: 0.7.1
+      constraints: 0.7.1+tap.1
       prereleases: {}
+  values:
+  - secretRef:
+      name: cartographer-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cartographer-values
+  namespace: #@ data.values.platform.namespace
+stringData:
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

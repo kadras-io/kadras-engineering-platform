@@ -19,7 +19,7 @@ spec:
           - kbld: {}
       export:
       - imgpkgBundle:
-          image: ghcr.io/kadras-io/kadras-engineering-platform
+          image: ghcr.io/kadras-io/engineering-platform
           useKbldImagesLock: true
         includePaths:
         - config

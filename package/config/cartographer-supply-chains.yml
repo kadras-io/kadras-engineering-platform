@@ -1,15 +1,32 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("cartographer-supply-chains"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "registry": {}
+#@   }
+#@
+#@   if data.values.cartographer.supply_chains:
+#@     values.update(struct.decode(data.values.cartographer.supply_chains))
+#@   end
+#@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository and (not hasattr(data.values.cartographer.supply_chains, "registry") or not hasattr(data.values.cartographer.supply_chains.registry, "server") or not hasattr(data.values.cartographer.supply_chains.registry, "repository") or not data.values.cartographer.supply_chains.registry.server or not data.values.cartographer.supply_chains.registry.repository):
+#@     values["registry"]["server"] = data.values.platform.oci_registry.server.rstrip("/")
+#@     values["registry"]["repository"] = data.values.platform.oci_registry.repository.rstrip("/") + "/workloads"
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: cartographer-supply-chains
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: cartographer-supply-chains
     kapp.k14s.io/change-rule.cartographer: upsert after upserting cartographer
@@ -20,7 +37,7 @@ spec:
   packageRef:
     refName: cartographer-supply-chains.packages.kadras.io
     versionSelection:
-      constraints: 0.5.0
+      constraints: 0.5.1
       prereleases: {}
   values:
   - secretRef:
@@ -30,8 +47,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cartographer-supply-chains-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.cartographer.supply_chains)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

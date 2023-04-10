@@ -1,15 +1,31 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("tekton-pipelines"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "ca_cert_data": ""
+#@   }
+#@
+#@   if data.values.tekton.pipelines:
+#@     values.update(struct.decode(data.values.tekton.pipelines))
+#@   end
+#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.tekton.pipelines, "ca_cert_data") or not data.values.tekton.pipelines.ca_cert_data):
+#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: tekton-pipelines
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: tekton-pipelines
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
@@ -18,7 +34,7 @@ spec:
   packageRef:
     refName: tekton-pipelines.packages.kadras.io
     versionSelection:
-      constraints: 0.46.0+kadras.1
+      constraints: 0.46.0+kadras.2
       prereleases: {}
   values:
   - secretRef:
@@ -28,8 +44,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: tekton-pipelines-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.tekton.pipelines)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

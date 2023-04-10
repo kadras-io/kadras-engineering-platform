@@ -1,15 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("cert-manager"):
+
+#@ def build_package_values():
+#@   values = {}
+#@
+#@   if data.values.cert_manager.core:
+#@     values.update(struct.decode(data.values.cert_manager.core))
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: cert-manager
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: cert-manager
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
@@ -18,7 +29,7 @@ spec:
   packageRef:
     refName: cert-manager.packages.kadras.io
     versionSelection:
-      constraints: 1.11.0+kadras.2
+      constraints: 1.11.1+kadras.1
       prereleases: {}
   values:
     - secretRef:
@@ -28,8 +39,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cert-manager-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.cert_manager)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

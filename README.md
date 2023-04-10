@@ -74,8 +74,12 @@ Documentation, tutorials and examples for this package are available in the [doc
 The Engineering Platform package can be customized via a `values.yml` file.
 
   ```yaml
-  excluded_blueprints:
-    - "config-template"
+  platform:
+    ingress:
+      domain: thomasvitale.com
+    oci_registry:
+      server: ghcr.io
+      repository: thomasvitale
   ```
 
 Reference the `values.yml` file from the `kctrl` command when installing or upgrading the package.
@@ -96,10 +100,27 @@ The Engineering Platform package has the following configurable properties.
 
 | Config | Default | Description |
 |-------|-------------------|-------------|
-| `packages.namespace` | `""` | The namespace where to install the platform. |
-| `packages.exclusions` | `[]` | A list of packages to exclude from being installed. |
+| `platform.namespace` | `kadras-packages` | The namespace where to install the platform. |
+| `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
+| `platform.ca_cert_data` | `""` | PEM-encoded certificate data to trust TLS connections with a custom CA. |
+| `platform.ingress.domain.issuer.type` | `private` | The type of ClusterIssuer the platform will use to enable TLS communications. Options: `private`, `letsencrypt_staging`, `letsencrypt`, `custom`. |
+| `platform.ingress.domain.issuer.name` | `""` | A reference to a custom ClusterIssuer previously created on the cluster where the platform will be installed. Required when the type is `custom`. |
+| `platform.oci_registry.server` | `""` | The server of the OCI Registry where the platform will publish and consume OCI images. |
+| `platform.oci_registry.repository` | `""` | The repository in the OCI Registry where the platform will publish and consume OCI images. |
+| `platform.oci_registry.credentials.username` | `""` | Username to access the OCI registry. Note: Use `_json_key` for GCR. |
+| `platform.oci_registry.credentials.password` | `""` | Token to access the OCI registry. Note: Use contents of service account key json for GCR. |
+| `platform.oci_registry.secret.name` | `supply-chain-registry-credentials` | The name of the Secret holding the credentials to access the OCI registry. |
+| `platform.oci_registry.secret.namespace` | `kadras-packages` | The namespace of the Secret holding the credentials to access the OCI registry. |
+| `platform.cosign.secret.name` | `supply-chain-cosign-key-pair` | The name of the Secret holding the Cosign key pair. |
+| `platform.cosign.secret.namespace` | `kadras-packages` | The namespace of the Secret holding the Cosign key pair. |
+
+Each Kadras package included in the platform can be configured independently.
+
+| Config | Default | Description |
+|-------|-------------------|-------------|
 | `buildpacks.catalog` | `{}` | Configuration for the Buildpacks Catalog package. |
 | `buildpacks.kpack` | `{}` | Configuration for the Kpack package. |
+| `cartographer.core` | `{}` | Configuration for the Cartographer Core package including Cartographer and Cartographer Conventions. |
 | `cartographer.blueprints` | `{}` | Configuration for the Cartographer Blueprints package. |
 | `cartographer.delivery` | `{}` | Configuration for the Cartographer Delivery package. |
 | `cartographer.supply_chains` | `{}` | Configuration for the Cartographer Supply Chains package. |
@@ -109,10 +130,10 @@ The Engineering Platform package has the following configurable properties.
 | `flux.source_controller` | `{}` | Configuration for the FluxCD Source Controller package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
-| `namespace_setup` | `{}` | Configuration for the Namespace Setup package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
 | `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |
 | `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
+| `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
 </details>
 

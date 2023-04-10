@@ -1,25 +1,41 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("buildpacks-catalog"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "kp_default_repository": {}
+#@   }
+#@
+#@   if data.values.buildpacks.catalog:
+#@     values.update(struct.decode(data.values.buildpacks.catalog))
+#@   end
+#@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository and (not hasattr(data.values.buildpacks.catalog, "kp_default_repository") or not hasattr(data.values.buildpacks.catalog.kp_default_repository, "name") or not data.values.buildpacks.catalog.kp_default_repository.name):
+#@     values["kp_default_repository"]["name"] = data.values.platform.oci_registry.server.rstrip("/") + "/" + data.values.platform.oci_registry.repository.rstrip("/") + "/buildpacks"
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: buildpacks-catalog
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: buildpacks-catalog
-    kapp.k14s.io/change-rule.buildpacks-catalog: upsert after upserting kpack
+    kapp.k14s.io/change-rule.kpack: upsert after upserting kpack
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount  
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
     refName: buildpacks-catalog.packages.kadras.io
     versionSelection:
-      constraints: 0.6.0
+      constraints: 0.6.1
       prereleases: {}
   values:
   - secretRef:
@@ -29,8 +45,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: buildpacks-catalog-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.buildpacks.catalog)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

@@ -1,15 +1,31 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("contour"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "certificates": {}
+#@   }
+#@
+#@   if data.values.contour:
+#@     values.update(struct.decode(data.values.contour))
+#@   end
+#@   if is_package_enabled("cert-manager") and (not hasattr(data.values.contour, "certificates") or not hasattr(data.values.contour.certificates, "useCertManager")):
+#@     values["certificates"]["useCertManager"] = True
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: contour
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: contour
     kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
@@ -19,7 +35,7 @@ spec:
   packageRef:
     refName: contour.packages.kadras.io
     versionSelection:
-      constraints: 1.24.2
+      constraints: 1.24.3+kadras.2
   values:
     - secretRef:
         name: contour-values
@@ -28,8 +44,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: contour-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.contour)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

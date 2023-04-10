@@ -1,0 +1,61 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("workspace-provisioner"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "oci_registry": {
+#@       "secret": {}
+#@     },
+#@     "cosign": {
+#@       "secret": {}
+#@     }
+#@   }
+#@
+#@   if data.values.workspace_provisioner:
+#@     values.update(struct.decode(data.values.workspace_provisioner))
+#@   end
+#@   if data.values.platform.oci_registry.secret.name and data.values.platform.oci_registry.secret.namespace and (not hasattr(data.values.workspace_provisioner, "oci_registry") or not hasattr(data.values.workspace_provisioner.oci_registry, "secret") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "name") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "namespace") or not data.values.workspace_provisioner.oci_registry.secret.name or not data.values.workspace_provisioner.oci_registry.secret.namespace):
+#@     values["oci_registry"]["secret"]["name"] = data.values.platform.oci_registry.secret.name
+#@     values["oci_registry"]["secret"]["namespace"] = data.values.platform.oci_registry.secret.namespace
+#@   end
+#@   if data.values.platform.cosign.secret.name and data.values.platform.cosign.secret.namespace and (not hasattr(data.values.workspace_provisioner, "cosign") or not hasattr(data.values.workspace_provisioner.cosign, "secret") or not hasattr(data.values.workspace_provisioner.cosign.secret, "name") or not hasattr(data.values.workspace_provisioner.cosign.secret, "namespace") or not data.values.workspace_provisioner.cosign.secret.name or not data.values.workspace_provisioner.cosign.secret.namespace):
+#@     values["cosign"]["secret"]["name"] = data.values.platform.cosign.secret.name
+#@     values["cosign"]["secret"]["namespace"] = data.values.platform.cosign.secret.namespace
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: workspace-provisioner
+  namespace: #@ data.values.platform.namespace
+  annotations:
+    kapp.k14s.io/change-group: workspace-provisioner
+    kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: workspace-provisioner.packages.kadras.io
+    versionSelection:
+      constraints: 0.1.1
+  values:
+    - secretRef:
+        name: workspace-provisioner-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: workspace-provisioner-values
+  namespace: #@ data.values.platform.namespace
+stringData:
+  values.yaml: #@ yaml.encode(build_package_values())
+
+#@ end

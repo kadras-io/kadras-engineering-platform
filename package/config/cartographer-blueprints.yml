@@ -1,15 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("cartographer-blueprints"):
+
+#@ def build_package_values():
+#@   values = {}
+#@
+#@   if data.values.cartographer.blueprints:
+#@     values.update(struct.decode(data.values.cartographer.blueprints))
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: cartographer-blueprints
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: cartographer-blueprints
     kapp.k14s.io/change-rule.cartographer: upsert after upserting cartographer
@@ -21,7 +32,7 @@ spec:
   packageRef:
     refName: cartographer-blueprints.packages.kadras.io
     versionSelection:
-      constraints: 0.5.0
+      constraints: 0.5.1
       prereleases: {}
   values:
   - secretRef:
@@ -31,8 +42,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cartographer-blueprints-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.cartographer.blueprints)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end
