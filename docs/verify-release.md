@@ -1,4 +1,4 @@
-# Verifying the Tekton Pipelines Package Release
+# Verifying the Package Release
 
 This package is published as an OCI artifact, signed with Sigstore [Cosign](https://docs.sigstore.dev/cosign/overview), and associated with a [SLSA Provenance](https://slsa.dev/provenance) attestation.
 

@@ -3,12 +3,60 @@
 ---
 
 #@schema/desc "Configuration for the platform packages."
-packages:
+platform:
   #@schema/desc "The namespace where to install the platform."
-  namespace: ""
+  namespace: kadras-packages
   #@schema/desc "A list of packages to exclude from being installed."
-  excluded:
+  excluded_packages:
     - ""
+
+  #@schema/desc "PEM-encoded certificate data to trust TLS connections with a custom CA."
+  ca_cert_data: ""
+
+  #@schema/desc "Setting for the Ingress controller that the platform will use."
+  ingress:
+    #@schema/desc "The base domain name the platform will use to configure the Ingress controller. It must be a valid DNS name."
+    domain: ""
+    #@schema/desc "A reference to the ClusterIssuer the platform will use to enable TLS communications."
+    issuer:
+      #@schema/desc "The type of ClusterIssuer the platform will use to enable TLS communications. Options: `private`, `letsencrypt_staging`, `letsencrypt`, `custom`."
+      #@schema/validation one_of=["private", "letsencrypt_staging", "letsencrypt", "custom"]
+      type: private
+      #@schema/desc "A reference to a custom ClusterIssuer previously created on the cluster where the platform will be installed. Required when the type is `custom`."
+      #@schema/validation when=lambda _, ctx: ctx.parent["type"] == "custom"
+      name: ""
+
+  #@schema/desc "Settings for the OCI registry that the platform will use."
+  #@schema/validation one_not_null=["credentials", "secret"]
+  oci_registry:
+    #@schema/desc "The server of the OCI Registry where the platform will publish and consume OCI images."
+    #@schema/examples ("GitHub Container Registry", "ghcr.io")
+    server: ""
+    #@schema/desc "The repository in the OCI Registry where the platform will publish and consume OCI images."
+    #@schema/examples ("Repository on GitHub Container Registry", "my-org")
+    repository: ""
+    #@schema/desc "Credentials to access the OCI registry."
+    #@schema/nullable
+    credentials:
+      #@schema/desc "Username to access the OCI registry. Note: Use `_json_key` for GCR."
+      username: ""
+      #@schema/desc "Token to access the OCI registry. Note: Use contents of service account key json for GCR."
+      password: ""
+    #@schema/desc "Configuration for the Secret holding the credentials to access the OCI registry."
+    secret:
+      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry."
+      name: supply-chain-registry-credentials
+      #@schema/desc "The namespace of the Secret holding the credentials to access the OCI registry."
+      namespace: kadras-packages
+
+  #@schema/desc "Settings for Cosign, used for signing and verifying OCI artifacts."
+  cosign:
+    #@schema/desc "Configuration for the Secret holding the Cosign key pair."
+    secret:
+      #@schema/desc "The name of the Secret holding the Cosign key pair."
+      name: supply-chain-cosign-key-pair
+      #@schema/desc "The namespace of the Secret holding the Cosign key pair."
+      namespace: kadras-packages
 
 #@schema/desc "Configuration for Buildpacks related packages."
 buildpacks:
@@ -21,6 +69,9 @@ buildpacks:
 
 #@schema/desc "Configuration for Cartographer related packages."
 cartographer:
+  #@schema/desc "Configuration for the Cartographer Core package including Cartographer and Cartographer Conventions."
+  #@schema/type any=True
+  core: {}
   #@schema/desc "Configuration for the Cartographer Blueprints package."
   #@schema/type any=True
   blueprints: {}
@@ -31,9 +82,14 @@ cartographer:
   #@schema/type any=True
   supply_chains: {}
 
-#@schema/desc "Configuration for the Cert Manager package."
-#@schema/type any=True
-cert_manager: {}
+#@schema/desc "Configuration for the Cert Manager related packages."
+cert_manager:
+  #@schema/desc "Configuration for the Cert Manager package."
+  #@schema/type any=True
+  core: {}
+  #@schema/desc "Configuration for the Cert Manager Issuers package."
+  #@schema/type any=True
+  issuers: {}
 
 #@schema/desc "Configuration for the Contour package."
 #@schema/type any=True
@@ -61,10 +117,6 @@ knative:
 #@schema/type any=True
 metrics_server: {}
 
-#@schema/desc "Configuration for the Namespace Setup package."
-#@schema/type any=True
-namespace_setup: {}
-
 #@schema/desc "Configuration for the Secretgen Controller package."
 #@schema/type any=True
 secretgen_controller: {}
@@ -77,3 +129,7 @@ tekton:
   #@schema/desc "Configuration for the Tekton Pipelines package."
   #@schema/type any=True
   pipelines: {}
+
+#@schema/desc "Configuration for the Workspace Provisioner package."
+#@schema/type any=True
+workspace_provisioner: {}

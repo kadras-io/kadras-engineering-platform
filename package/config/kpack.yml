@@ -1,24 +1,63 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("kpack"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "ca_cert_data": "",
+#@     "kp_default_repository": {}
+#@   }
+#@
+#@   if data.values.buildpacks.kpack:
+#@     values.update(struct.decode(data.values.buildpacks.kpack))
+#@   end
+#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.buildpacks.kpack, "ca_cert_data") or not data.values.buildpacks.kpack.ca_cert_data):
+#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   end
+#@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository and (not hasattr(data.values.buildpacks.kpack, "kp_default_repository") or not hasattr(data.values.buildpacks.kpack.kp_default_repository, "name") or not data.values.buildpacks.kpack.kp_default_repository.name):
+#@     values["kp_default_repository"]["name"] = data.values.platform.oci_registry.server.rstrip("/") + "/" + data.values.platform.oci_registry.repository.rstrip("/") + "/buildpacks"
+#@   end
+#@   if hasattr(data.values.platform.oci_registry.credentials, "username") and hasattr(data.values.platform.oci_registry.credentials, "password") and data.values.platform.oci_registry.credentials.username and data.values.platform.oci_registry.credentials.password:
+#@     if not hasattr(data.values.buildpacks.kpack, "kp_default_repository") or not hasattr(data.values.buildpacks.kpack.kp_default_repository, "credentials") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.credentials, "username") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.credentials, "password") or not data.values.buildpacks.kpack.kp_default_repository.credentials.username or not data.values.buildpacks.kpack.kp_default_repository.credentials.password:
+#@       if not hasattr(data.values.buildpacks.kpack, "kp_default_repository") or not hasattr(data.values.buildpacks.kpack.kp_default_repository, "secret") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.secret, "name") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.secret, "namespace") or not data.values.buildpacks.kpack.kp_default_repository.secret.name or not data.values.buildpacks.kpack.kp_default_repository.secret.namespace:
+#@         values["kp_default_repository"]["credentials"] = {}
+#@         values["kp_default_repository"]["credentials"]["username"] = data.values.platform.oci_registry.credentials.username
+#@         values["kp_default_repository"]["credentials"]["password"] = data.values.platform.oci_registry.credentials.password
+#@       end
+#@     end
+#@   end
+#@   if data.values.platform.oci_registry.secret.name and data.values.platform.oci_registry.secret.namespace:
+#@     if not hasattr(data.values.buildpacks.kpack, "kp_default_repository") or not hasattr(data.values.buildpacks.kpack.kp_default_repository, "credentials") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.credentials, "username") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.credentials, "password") or not data.values.buildpacks.kpack.kp_default_repository.credentials.username or not data.values.buildpacks.kpack.kp_default_repository.credentials.password:
+#@       if not hasattr(data.values.buildpacks.kpack, "kp_default_repository") or not hasattr(data.values.buildpacks.kpack.kp_default_repository, "secret") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.secret, "name") or not hasattr(data.values.buildpacks.kpack.kp_default_repository.secret, "namespace") or not data.values.buildpacks.kpack.kp_default_repository.secret.name or not data.values.buildpacks.kpack.kp_default_repository.secret.namespace:
+#@         values["kp_default_repository"]["secret"] = {}
+#@         values["kp_default_repository"]["secret"]["name"] = data.values.platform.oci_registry.secret.name
+#@         values["kp_default_repository"]["secret"]["namespace"] = data.values.platform.oci_registry.secret.namespace
+#@       end
+#@     end
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: kpack
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: kpack
+    kapp.k14s.io/change-rule.workspace-provisioner: upsert after upserting workspace-provisioner
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
     refName: kpack.packages.kadras.io
     versionSelection:
-      constraints: 0.10.1
+      constraints: 0.10.1+kadras.1
       prereleases: {}
   values:
   - secretRef:
@@ -28,8 +67,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: kpack-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.buildpacks.kpack)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

@@ -1,15 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("spring-boot-conventions"):
+
+#@ def build_package_values():
+#@   values = {}
+#@
+#@   if data.values.conventions.spring_boot:
+#@     values.update(struct.decode(data.values.conventions.spring_boot))
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: spring-boot-conventions
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: spring-boot-conventions
     kapp.k14s.io/change-rule.spring-boot-conventions: upsert after upserting cartographer
@@ -19,7 +30,7 @@ spec:
   packageRef:
     refName: spring-boot-conventions.packages.kadras.io
     versionSelection:
-      constraints: 0.2.0
+      constraints: 0.2.1
   values:
     - secretRef:
         name: spring-boot-conventions-values
@@ -28,8 +39,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: spring-boot-conventions-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.conventions.spring_boot)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

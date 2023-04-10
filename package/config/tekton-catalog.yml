@@ -1,15 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("tekton-catalog"):
+
+#@ def build_package_values():
+#@   values = {}
+#@
+#@   if data.values.tekton.catalog:
+#@     values.update(struct.decode(data.values.tekton.catalog))
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: tekton-catalog
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: tekton-catalog
     kapp.k14s.io/change-rule.tekton-pipelines: upsert after upserting tekton-pipelines
@@ -19,7 +30,7 @@ spec:
   packageRef:
     refName: tekton-catalog.packages.kadras.io
     versionSelection:
-      constraints: 0.1.0
+      constraints: 0.1.1
       prereleases: {}
   values:
   - secretRef:
@@ -29,8 +40,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: tekton-catalog-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.tekton.catalog)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

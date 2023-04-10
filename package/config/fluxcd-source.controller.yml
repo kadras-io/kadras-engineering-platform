@@ -1,15 +1,26 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_enabled")
 
 #@ if is_package_enabled("fluxcd-source-controller"):
+
+#@ def build_package_values():
+#@   values = {}
+#@
+#@   if data.values.flux.source_controller:
+#@     values.update(struct.decode(data.values.flux.source_controller))
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: fluxcd-source-controller
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: fluxcd
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
@@ -18,7 +29,7 @@ spec:
   packageRef:
     refName: fluxcd-source-controller.packages.kadras.io
     versionSelection:
-      constraints: 0.36.0
+      constraints: 0.36.1
   values:
     - secretRef:
         name: fluxcd-source-controller-values
@@ -27,8 +38,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: fluxcd-source-controller-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.flux.source_controller)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

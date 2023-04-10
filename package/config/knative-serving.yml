@@ -1,17 +1,42 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_package_enabled", "get_issuer_name")
 
 #@ if is_package_enabled("knative-serving"):
+
+#@ def build_package_values():
+#@   values = {
+#@     "ca_cert_data": "",
+#@     "domain_name": "",
+#@     "ingress_issuer": ""
+#@   }
+#@
+#@   if data.values.knative.serving:
+#@     values.update(struct.decode(data.values.knative.serving))
+#@   end
+#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.knative.serving, "ca_cert_data") or not data.values.knative.serving.ca_cert_data):
+#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   end
+#@   if data.values.platform.ingress.domain and (not hasattr(data.values.knative.serving, "domain_name") or not data.values.knative.serving.domain_name):
+#@     values["domain_name"] = data.values.platform.ingress.domain
+#@   end
+#@   if data.values.platform.ingress.issuer and (not hasattr(data.values.knative.serving, "ingress_issuer") or not data.values.knative.serving.ingress_issuer):
+#@     values["ingress_issuer"] = get_issuer_name(data.values.platform.ingress.issuer)
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
   name: knative-serving
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: knative-serving
+    kapp.k14s.io/change-rule.cert-manager-issuers: upsert after upserting cert-manager-issuers
     kapp.k14s.io/change-rule.contour: upsert after upserting contour
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
@@ -19,7 +44,7 @@ spec:
   packageRef:
     refName: knative-serving.packages.kadras.io
     versionSelection:
-      constraints: 1.9.2+kadras.1
+      constraints: 1.9.3+kadras.2
   values:
     - secretRef:
         name: knative-serving-values
@@ -28,8 +53,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: knative-serving-values
-  namespace: #@ data.values.packages.namespace
+  namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(data.values.knative.serving)
+  values.yaml: #@ yaml.encode(build_package_values())
 
 #@ end

@@ -1,0 +1,65 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("cert-manager-issuers"):
+
+#@ def is_letsencrypt_issuer(issuer):
+#@   return issuer.type == "letsencrypt_staging" or issuer.type == "letsencrypt"
+#@ end
+
+#@ def is_letsencrypt_staging(issuer):
+#@   if issuer.type == "letsencrypt_staging":
+#@     return True
+#@   else:
+#@     return False
+#@   end
+#@ end
+
+#@ def build_package_values():
+#@   values = {
+#@     "letsencrypt": {}
+#@   }
+#@
+#@   if data.values.cert_manager.issuers:
+#@     values.update(struct.decode(data.values.cert_manager.issuers))
+#@   end
+#@   if data.values.platform.ingress.issuer and is_letsencrypt_issuer(data.values.platform.ingress.issuer) and (not hasattr(data.values.cert_manager.issuers, "letsencrypt") or not hasattr(data.values.cert_manager.issuers.letsencrypt, "include") or not data.values.cert_manager.issuers.letsencrypt.include):
+#@     values["letsencrypt"]["include"] = True
+#@     values["letsencrypt"]["staging"] = is_letsencrypt_staging(data.values.platform.ingress.issuer)
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager-issuers
+  namespace: #@ data.values.platform.namespace
+  annotations:
+    kapp.k14s.io/change-group: cert-manager-issuers
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: cert-manager-issuers.packages.kadras.io
+    versionSelection:
+      constraints: 0.1.0
+      prereleases: {}
+  values:
+    - secretRef:
+        name: cert-manager-issuers-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cert-manager-issuers-values
+  namespace: #@ data.values.platform.namespace
+stringData:
+  values.yaml: #@ yaml.encode(build_package_values())
+
+#@ end
