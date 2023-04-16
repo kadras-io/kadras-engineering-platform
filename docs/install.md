@@ -73,6 +73,11 @@ platform:
   oci_registry:
     server: <oci-server>
     repository: <oci-repository>
+  
+  cosign:
+    secret:
+      name: supply-chain-cosign-key-pair
+      namespace: kadras-packages
 
 workspace_provisioner:
   namespaces:
