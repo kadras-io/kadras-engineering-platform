@@ -54,9 +54,9 @@ platform:
     #@schema/desc "Configuration for the Secret holding the Cosign key pair."
     secret:
       #@schema/desc "The name of the Secret holding the Cosign key pair."
-      name: supply-chain-cosign-key-pair
+      name: ""
       #@schema/desc "The namespace of the Secret holding the Cosign key pair."
-      namespace: kadras-packages
+      namespace: ""
 
 #@schema/desc "Configuration for Buildpacks related packages."
 buildpacks:
