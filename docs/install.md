@@ -45,10 +45,10 @@ First, create a Secret with the credentials to access your container registry in
 
   ```shell
   kubectl create secret docker-registry supply-chain-registry-credentials \
-  --docker-server="${SUPPLY_CHAIN_REGISTRY_HOSTNAME}" \
-  --docker-username="${SUPPLY_CHAIN_REGISTRY_USERNAME}" \
-  --docker-password="${SUPPLY_CHAIN_REGISTRY_TOKEN}" \
-  --namespace=kadras-packages
+    --docker-server="${SUPPLY_CHAIN_REGISTRY_HOSTNAME}" \
+    --docker-username="${SUPPLY_CHAIN_REGISTRY_USERNAME}" \
+    --docker-password="${SUPPLY_CHAIN_REGISTRY_TOKEN}" \
+    --namespace=kadras-packages
   ```
 
 ## 4. Create Secret for Cosign
