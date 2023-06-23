@@ -35,7 +35,7 @@ spec:
   packageRef:
     refName: cartographer.packages.kadras.io
     versionSelection:
-      constraints: 0.7.1+tap.1
+      constraints: 0.7.3
       prereleases: {}
   values:
   - secretRef:
