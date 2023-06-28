@@ -1,30 +1,53 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("workspace-provisioner"):
+#@ if is_package_enabled("workspace-provisioner") and is_any_profile_enabled([profiles.full, profiles.serving]):
 
-#@ def build_package_values():
-#@   values = {
-#@     "oci_registry": {
-#@       "secret": {}
-#@     },
-#@     "cosign": {
-#@       "secret": {}
-#@     }
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.workspace_provisioner)
 #@
-#@   if data.values.workspace_provisioner:
-#@     values.update(struct.decode(data.values.workspace_provisioner))
+#@   #! Compute values for OCI Registry server
+#@   if is_any_profile_enabled([profiles.full]):
+#@     if data.values.platform.oci_registry.secret.name and data.values.platform.oci_registry.secret.namespace:
+#@       if not hasattr(data.values.workspace_provisioner, "oci_registry") or not hasattr(data.values.workspace_provisioner.oci_registry, "secret") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "name") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "namespace") or not data.values.workspace_provisioner.oci_registry.secret.name or not data.values.workspace_provisioner.oci_registry.secret.namespace:
+#@         values["oci_registry"] = {}
+#@         values["oci_registry"]["secret"] = {}
+#@         values["oci_registry"]["secret"]["name"] = data.values.platform.oci_registry.secret.name
+#@         values["oci_registry"]["secret"]["namespace"] = data.values.platform.oci_registry.secret.namespace
+#@       end
+#@     end
 #@   end
-#@   if data.values.platform.oci_registry.secret.name and data.values.platform.oci_registry.secret.namespace and (not hasattr(data.values.workspace_provisioner, "oci_registry") or not hasattr(data.values.workspace_provisioner.oci_registry, "secret") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "name") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "namespace") or not data.values.workspace_provisioner.oci_registry.secret.name or not data.values.workspace_provisioner.oci_registry.secret.namespace):
-#@     values["oci_registry"]["secret"]["name"] = data.values.platform.oci_registry.secret.name
-#@     values["oci_registry"]["secret"]["namespace"] = data.values.platform.oci_registry.secret.namespace
+#@
+#@   #! Compute values for Cosign
+#@   if is_any_profile_enabled([profiles.full]):
+#@     if data.values.platform.cosign.secret.name and data.values.platform.cosign.secret.namespace:
+#@       if not hasattr(data.values.workspace_provisioner, "cosign") or not hasattr(data.values.workspace_provisioner.cosign, "secret") or not hasattr(data.values.workspace_provisioner.cosign.secret, "name") or not hasattr(data.values.workspace_provisioner.cosign.secret, "namespace") or not data.values.workspace_provisioner.cosign.secret.name or not data.values.workspace_provisioner.cosign.secret.namespace:
+#@         values["cosign"] = {}
+#@         values["cosign"]["secret"] = {}
+#@         values["cosign"]["secret"]["name"] = data.values.platform.cosign.secret.name
+#@         values["cosign"]["secret"]["namespace"] = data.values.platform.cosign.secret.namespace
+#@       end
+#@     end
 #@   end
-#@   if data.values.platform.cosign.secret.name and data.values.platform.cosign.secret.namespace and (not hasattr(data.values.workspace_provisioner, "cosign") or not hasattr(data.values.workspace_provisioner.cosign, "secret") or not hasattr(data.values.workspace_provisioner.cosign.secret, "name") or not hasattr(data.values.workspace_provisioner.cosign.secret, "namespace") or not data.values.workspace_provisioner.cosign.secret.name or not data.values.workspace_provisioner.cosign.secret.namespace):
-#@     values["cosign"]["secret"]["name"] = data.values.platform.cosign.secret.name
-#@     values["cosign"]["secret"]["namespace"] = data.values.platform.cosign.secret.namespace
+#@
+#@   #! Compute values for Git server
+#@   if is_any_profile_enabled([profiles.full]):
+#@     if data.values.platform.git.server and data.values.platform.git.secret.name and data.values.platform.git.secret.namespace:
+#@       if not hasattr(data.values.workspace_provisioner, "git") or not hasattr(data.values.workspace_provisioner.git, "server") or not hasattr(data.values.workspace_provisioner.git, "secret") or not hasattr(data.values.workspace_provisioner.cosign.secret, "name") or not hasattr(data.values.workspace_provisioner.cosign.secret, "namespace") or not data.values.workspace_provisioner.git.server or not data.values.workspace_provisioner.cosign.secret.name or not data.values.workspace_provisioner.cosign.secret.namespace:
+#@         values["git"] = {}
+#@         values["git"]["server"] = data.values.platform.git.server
+#@         values["git"]["secret"] = {}
+#@         values["git"]["secret"]["name"] = data.values.platform.git.secret.name
+#@         values["git"]["secret"]["namespace"] = data.values.platform.git.secret.namespace
+#@       end
+#@     end
+#@   end
+#@
+#@   #! Compute values for namespaces
+#@   if not hasattr(data.values.workspace_provisioner, "namespaces"):
+#@     values["namespaces"] = [{"name": "default"}]
 #@   end
 #@
 #@   return struct.encode(values)
@@ -45,7 +68,7 @@ spec:
   packageRef:
     refName: workspace-provisioner.packages.kadras.io
     versionSelection:
-      constraints: 0.1.1
+      constraints: 0.2.0
   values:
     - secretRef:
         name: workspace-provisioner-values
@@ -56,6 +79,6 @@ metadata:
   name: workspace-provisioner-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

@@ -1,18 +1,12 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("spring-boot-conventions"):
+#@ if is_package_enabled("spring-boot-conventions") and is_any_profile_enabled([profiles.full]):
 
-#@ def build_package_values():
-#@   values = {}
-#@
-#@   if data.values.conventions.spring_boot:
-#@     values.update(struct.decode(data.values.conventions.spring_boot))
-#@   end
-#@
-#@   return struct.encode(values)
+#@ def compute_package_values():
+#@   return data.values.conventions.spring_boot
 #@ end
 
 ---
@@ -41,6 +35,6 @@ metadata:
   name: spring-boot-conventions-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

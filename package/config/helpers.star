@@ -1,7 +1,21 @@
 load("@ytt:data", "data")
+load("@ytt:struct", "struct")
+
+profiles = struct.make(
+  full="full",
+  serving="serving"
+)
 
 def is_package_enabled(name):
   return (name not in data.values.platform.excluded_packages)
+end
+
+def is_profile_enabled(profile):
+  return data.values.platform.profile == profile
+end
+
+def is_any_profile_enabled(profiles):
+  return data.values.platform.profile in profiles
 end
 
 def get_issuer_name(issuer):

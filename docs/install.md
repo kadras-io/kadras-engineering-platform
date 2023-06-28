@@ -2,7 +2,7 @@
 
 ## 1. Prerequisites
 
-* Kubernetes 1.24+
+* Kubernetes 1.25+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Sigstore [`cosign`](https://docs.sigstore.dev/cosign/installation/) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
@@ -14,13 +14,12 @@
 
 ## 2. Add the Kadras Repository
 
-Add the Kadras repository to make all Kadras packages available to the cluster.
+Add the Kadras repository to make all the platform packages available to the cluster.
 
   ```shell
-  kubectl create namespace kadras-packages
   kctrl package repository add -r kadras-packages \
     --url ghcr.io/kadras-io/kadras-packages \
-    -n kadras-packages
+    -n kadras-packages --create-namespace
   ```
 
 You can check the full list of available packages as follows.
@@ -61,7 +60,26 @@ Next, use Cosign to generate a key-pair that will be used by the platform to sig
 
 The previous command will create a cosign.pub file in the current directory. That's the public key you can use the verify OCI artifacts built and signed by the platform.
 
-## 5. Configure the Platform
+## 5. Create Secret for Git server
+
+Then, create a Secret with the credentials to access your Git server in read/write mode. It will be used by the platform to work with Git repositories.
+
+  ```shell
+  export SUPPLY_CHAIN_GIT_USERNAME=<username>
+  export SUPPLY_CHAIN_GIT_TOKEN=<token>
+  ```
+
+* `<username>` is the username to access the Git server.
+* `<token>` is a token with read/write permissions to access the Git server.
+
+  ```shell
+  kubectl create secret generic supply-chain-git-credentials \
+    --from-literal=username"${SUPPLY_CHAIN_REGISTRY_USERNAME}" \
+    --from-literal=password="${SUPPLY_CHAIN_REGISTRY_TOKEN}" \
+    --namespace=kadras-packages
+  ```
+
+## 6. Configure the Platform
 
 The installation of the Kadras Engineering Platform can be configured via YAML. Create a `values.yml` file with any configuration you need for the platform. The following is a minimal configuration example.
 
@@ -73,26 +91,11 @@ platform:
   oci_registry:
     server: <oci-server>
     repository: <oci-repository>
-  
-  cosign:
-    secret:
-      name: supply-chain-cosign-key-pair
-      namespace: kadras-packages
-
-workspace_provisioner:
-  namespaces:
-    - name: default
-  git:
-    credentials:
-      username: <github-username>
-      password: <github-token>
 ```
 
 * `<domain>` is the base domain name the platform will use to configure the Ingress controller. It must be a valid DNS name. For example, `lab.thomasvitale.com`.
 * `<oci-server>` is the server of the OCI registry where the platform will publish and consume OCI images. It must be the same used in step 3 when creating a Secret with the OCI registry credentials. For example, `ghcr.io`, `gcr.io`, `quay.io`, `index.docker.io`.
 * `<oci-repository>` is the repository in the OCI registry where the platform will publish and consume OCI images. It must be the same used in step 3 when creating a Secret with the OCI registry credentials. For example, it might be your username or organization name depending on which OCI server you're using.
-* `<github-username>` is your username to access your Git repositories on GitHub. It's not needed if you won't use the GitOps workflows offered by the platform and only use public Git repositories.
-* `<github-token>` is a token with read/write permissions to access your Git repositories on GitHub. It's not needed if you won't use the GitOps workflows offered by the platform and only use public Git repositories.
 
 ## 6. Install the Platform
 

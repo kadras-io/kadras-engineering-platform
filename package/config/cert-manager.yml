@@ -1,18 +1,12 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cert-manager"):
+#@ if is_package_enabled("cert-manager") and is_any_profile_enabled([profiles.full, profiles.serving]):
 
-#@ def build_package_values():
-#@   values = {}
-#@
-#@   if data.values.cert_manager.core:
-#@     values.update(struct.decode(data.values.cert_manager.core))
-#@   end
-#@
-#@   return struct.encode(values)
+#@ def compute_package_values():
+#@   return data.values.cert_manager.core
 #@ end
 
 ---
@@ -29,7 +23,7 @@ spec:
   packageRef:
     refName: cert-manager.packages.kadras.io
     versionSelection:
-      constraints: 1.12.1
+      constraints: 1.12.2
       prereleases: {}
   values:
     - secretRef:
@@ -41,6 +35,6 @@ metadata:
   name: cert-manager-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

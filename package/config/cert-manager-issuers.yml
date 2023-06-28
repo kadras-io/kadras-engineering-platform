@@ -1,9 +1,9 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cert-manager-issuers"):
+#@ if is_package_enabled("cert-manager-issuers") and is_any_profile_enabled([profiles.full, profiles.serving]):
 
 #@ def is_letsencrypt_issuer(issuer):
 #@   return issuer.type == "letsencrypt_staging" or issuer.type == "letsencrypt"
@@ -17,17 +17,16 @@
 #@   end
 #@ end
 
-#@ def build_package_values():
-#@   values = {
-#@     "letsencrypt": {}
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.cert_manager.issuers)
 #@
-#@   if data.values.cert_manager.issuers:
-#@     values.update(struct.decode(data.values.cert_manager.issuers))
-#@   end
-#@   if data.values.platform.ingress.issuer and is_letsencrypt_issuer(data.values.platform.ingress.issuer) and (not hasattr(data.values.cert_manager.issuers, "letsencrypt") or not hasattr(data.values.cert_manager.issuers.letsencrypt, "include") or not data.values.cert_manager.issuers.letsencrypt.include):
-#@     values["letsencrypt"]["include"] = True
-#@     values["letsencrypt"]["staging"] = is_letsencrypt_staging(data.values.platform.ingress.issuer)
+#@   if data.values.platform.ingress.issuer and is_letsencrypt_issuer(data.values.platform.ingress.issuer) and data.values.platform.ingress.issuer.email:
+#@     if not hasattr(data.values.cert_manager.issuers, "letsencrypt") or not hasattr(data.values.cert_manager.issuers.letsencrypt, "include") or not data.values.cert_manager.issuers.letsencrypt.include:
+#@       values["letsencrypt"] = {}
+#@       values["letsencrypt"]["include"] = True
+#@       values["letsencrypt"]["staging"] = is_letsencrypt_staging(data.values.platform.ingress.issuer)
+#@       values["letsencrypt"]["email"] = data.values.platform.ingress.issuer.email
+#@     end
 #@   end
 #@
 #@   return struct.encode(values)
@@ -48,7 +47,7 @@ spec:
   packageRef:
     refName: cert-manager-issuers.packages.kadras.io
     versionSelection:
-      constraints: 0.2.0
+      constraints: 0.2.1
       prereleases: {}
   values:
     - secretRef:
@@ -60,6 +59,6 @@ metadata:
   name: cert-manager-issuers-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

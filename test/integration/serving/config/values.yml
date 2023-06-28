@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: engineering-platform-values
+  namespace: tests
+stringData:
+  values.yaml: |
+    platform:
+      profile: serving
+      infrastructure_provider: local
+      ingress:
+        domain: 127.0.0.1.sslip.io

@@ -1,0 +1,6 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - script: |
+      curl -k --fail-with-body https://band-service.tests.127.0.0.1.sslip.io
