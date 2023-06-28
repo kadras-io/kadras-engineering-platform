@@ -9,3 +9,14 @@ jobs:
     permissions:
       contents: read
     uses: kadras-io/github-reusable-workflows/.github/workflows/carvel-package-test-config.yml@main
+
+  test-integration:
+    name: Integration Tests
+    strategy:
+      matrix:
+        k8s_version: [v1.25, v1.26, v1.27]
+    permissions:
+      contents: read
+    uses: kadras-io/github-reusable-workflows/.github/workflows/carvel-package-test-integration.yml@main
+    with:
+      k8s_version: ${{ matrix.k8s_version }}
