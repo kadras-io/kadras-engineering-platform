@@ -1,18 +1,12 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("tekton-catalog"):
+#@ if is_package_enabled("tekton-catalog") and is_any_profile_enabled([profiles.full]):
 
-#@ def build_package_values():
-#@   values = {}
-#@
-#@   if data.values.tekton.catalog:
-#@     values.update(struct.decode(data.values.tekton.catalog))
-#@   end
-#@
-#@   return struct.encode(values)
+#@ def compute_package_values():
+#@   return data.values.tekton.catalog
 #@ end
 
 ---
@@ -42,6 +36,6 @@ metadata:
   name: tekton-catalog-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

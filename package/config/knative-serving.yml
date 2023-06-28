@@ -1,26 +1,24 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled", "get_issuer_name")
+#@ load("/helpers.star", "get_issuer_name", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("knative-serving"):
+#@ if is_package_enabled("knative-serving") and is_any_profile_enabled([profiles.full, profiles.serving]):
 
-#@ def build_package_values():
-#@   values = {
-#@     "ca_cert_data": "",
-#@     "domain_name": "",
-#@     "ingress_issuer": ""
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.knative.serving)
 #@
-#@   if data.values.knative.serving:
-#@     values.update(struct.decode(data.values.knative.serving))
-#@   end
+#@   #! Compute values for CA Certificates
 #@   if data.values.platform.ca_cert_data and (not hasattr(data.values.knative.serving, "ca_cert_data") or not data.values.knative.serving.ca_cert_data):
 #@     values["ca_cert_data"] = data.values.platform.ca_cert_data
 #@   end
+#@
+#@   #! Compute values for Ingress Domain Name
 #@   if data.values.platform.ingress.domain and (not hasattr(data.values.knative.serving, "domain_name") or not data.values.knative.serving.domain_name):
 #@     values["domain_name"] = data.values.platform.ingress.domain
 #@   end
+#@
+#@   #! Compute values for Ingress Issuer
 #@   if data.values.platform.ingress.issuer and (not hasattr(data.values.knative.serving, "ingress_issuer") or not data.values.knative.serving.ingress_issuer):
 #@     values["ingress_issuer"] = get_issuer_name(data.values.platform.ingress.issuer)
 #@   end
@@ -44,7 +42,7 @@ spec:
   packageRef:
     refName: knative-serving.packages.kadras.io
     versionSelection:
-      constraints: 1.10.2
+      constraints: 1.10.2+kadras.1
   values:
     - secretRef:
         name: knative-serving-values
@@ -55,6 +53,6 @@ metadata:
   name: knative-serving-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

@@ -1,20 +1,16 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cartographer"):
+#@ if is_package_enabled("cartographer") and is_any_profile_enabled([profiles.full]):
 
-#@ def build_package_values():
-#@   values = {
-#@     "ca_cert_data": ""
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.cartographer.core)
 #@
-#@   if data.values.cartographer.core:
-#@     values.update(struct.decode(data.values.cartographer.core))
-#@   end
-#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.cartographer.core, "ca_cert_data") or not data.values.cartographer.core.ca_cert_data):
-#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   #! Compute values for CA Certificates
+#@   if data.values.platform.ca_cert_data:
+#@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
 #@   end
 #@
 #@   return struct.encode(values)
@@ -47,6 +43,6 @@ metadata:
   name: cartographer-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

@@ -1,20 +1,16 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("tekton-pipelines"):
+#@ if is_package_enabled("tekton-pipelines") and is_any_profile_enabled([profiles.full]):
 
-#@ def build_package_values():
-#@   values = {
-#@     "ca_cert_data": ""
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.tekton.pipelines)
 #@
-#@   if data.values.tekton.pipelines:
-#@     values.update(struct.decode(data.values.tekton.pipelines))
-#@   end
-#@   if data.values.platform.ca_cert_data and (not hasattr(data.values.tekton.pipelines, "ca_cert_data") or not data.values.tekton.pipelines.ca_cert_data):
-#@     values["ca_cert_data"] = data.values.platform.ca_cert_data
+#@   #! Compute values for CA Certificates
+#@   if data.values.platform.ca_cert_data:
+#@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
 #@   end
 #@
 #@   return struct.encode(values)
@@ -46,6 +42,6 @@ metadata:
   name: tekton-pipelines-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

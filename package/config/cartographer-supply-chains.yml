@@ -1,21 +1,20 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_enabled")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cartographer-supply-chains"):
+#@ if is_package_enabled("cartographer-supply-chains") and is_any_profile_enabled([profiles.full]):
 
-#@ def build_package_values():
-#@   values = {
-#@     "registry": {}
-#@   }
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.cartographer.supply_chains)
 #@
-#@   if data.values.cartographer.supply_chains:
-#@     values.update(struct.decode(data.values.cartographer.supply_chains))
-#@   end
-#@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository and (not hasattr(data.values.cartographer.supply_chains, "registry") or not hasattr(data.values.cartographer.supply_chains.registry, "server") or not hasattr(data.values.cartographer.supply_chains.registry, "repository") or not data.values.cartographer.supply_chains.registry.server or not data.values.cartographer.supply_chains.registry.repository):
-#@     values["registry"]["server"] = data.values.platform.oci_registry.server.rstrip("/")
-#@     values["registry"]["repository"] = data.values.platform.oci_registry.repository.rstrip("/") + "/workloads"
+#@   #! Compute values for OCI Registry server
+#@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository:
+#@     if not hasattr(data.values.cartographer.supply_chains, "registry") or not hasattr(data.values.cartographer.supply_chains.registry, "server") or not hasattr(data.values.cartographer.supply_chains.registry, "repository") or not data.values.cartographer.supply_chains.registry.server or not data.values.cartographer.supply_chains.registry.repository:
+#@       values["registry"] = {}
+#@       values["registry"]["server"] = data.values.platform.oci_registry.server.rstrip("/")
+#@       values["registry"]["repository"] = data.values.platform.oci_registry.repository.rstrip("/") + "/workloads"
+#@     end
 #@   end
 #@
 #@   return struct.encode(values)
@@ -49,6 +48,6 @@ metadata:
   name: cartographer-supply-chains-values
   namespace: #@ data.values.platform.namespace
 stringData:
-  values.yaml: #@ yaml.encode(build_package_values())
+  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

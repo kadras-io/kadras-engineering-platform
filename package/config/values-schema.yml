@@ -4,6 +4,9 @@
 
 #@schema/desc "Configuration for the platform packages."
 platform:
+  #@schema/desc "The platform profile to install. Options: `full`, `serving`."
+  #@schema/validation one_of=["full", "serving"]
+  profile: full
   #@schema/desc "The namespace where to install the platform."
   namespace: kadras-packages
   #@schema/desc "A list of packages to exclude from being installed."
@@ -12,6 +15,11 @@ platform:
 
   #@schema/desc "PEM-encoded certificate data to trust TLS connections with a custom CA."
   ca_cert_data: ""
+
+  #@schema/desc "The underlying infrastructure provider. Options are `local` and `vsphere`. This field is not required, but it enables better validation and defaulting if provided."
+  #@schema/validation one_of=["local", "vsphere"]
+  #@schema/nullable
+  infrastructure_provider: ""
 
   #@schema/desc "Setting for the Ingress controller that the platform will use."
   ingress:
@@ -25,9 +33,11 @@ platform:
       #@schema/desc "A reference to a custom ClusterIssuer previously created on the cluster where the platform will be installed. Required when the type is `custom`."
       #@schema/validation when=lambda _, ctx: ctx.parent["type"] == "custom"
       name: ""
+      #@schema/desc "The email address that Let's Encrypt will use to send info on expiring certificates or other issues. Required when the type is `letsencrypt_staging` or `letsencrypt`."
+      #@schema/validation when=lambda _, ctx: ctx.parent["type"] == "letsencrypt_staging" or ctx.parent["type"] == "letsencrypt"
+      email: ""
 
   #@schema/desc "Settings for the OCI registry that the platform will use."
-  #@schema/validation one_not_null=["credentials", "secret"]
   oci_registry:
     #@schema/desc "The server of the OCI Registry where the platform will publish and consume OCI images."
     #@schema/examples ("GitHub Container Registry", "ghcr.io")
@@ -35,13 +45,6 @@ platform:
     #@schema/desc "The repository in the OCI Registry where the platform will publish and consume OCI images."
     #@schema/examples ("Repository on GitHub Container Registry", "my-org")
     repository: ""
-    #@schema/desc "Credentials to access the OCI registry."
-    #@schema/nullable
-    credentials:
-      #@schema/desc "Username to access the OCI registry. Note: Use `_json_key` for GCR."
-      username: ""
-      #@schema/desc "Token to access the OCI registry. Note: Use contents of service account key json for GCR."
-      password: ""
     #@schema/desc "Configuration for the Secret holding the credentials to access the OCI registry."
     secret:
       #@schema/desc "The name of the Secret holding the credentials to access the OCI registry."
@@ -54,9 +57,21 @@ platform:
     #@schema/desc "Configuration for the Secret holding the Cosign key pair."
     secret:
       #@schema/desc "The name of the Secret holding the Cosign key pair."
-      name: ""
+      name: supply-chain-cosign-key-pair
       #@schema/desc "The namespace of the Secret holding the Cosign key pair."
-      namespace: ""
+      namespace: kadras-packages
+  
+  #@schema/desc "Settings for the Git server that the platform will use."
+  git:
+    #@schema/desc "The server hosting the Git repositories used by the plaform."
+    #@schema/examples ("GitHub", "https://github.com")
+    server: https://github.com
+    #@schema/desc "Configuration for the Secret holding the credentials to access the Git server."
+    secret:
+      #@schema/desc "The name of the Secret holding the credentials to access the Git server."
+      name: supply-chain-git-credentials
+      #@schema/desc "The namespace of the Secret holding the credentials to access the Git server."
+      namespace: kadras-packages
 
 #@schema/desc "Configuration for Buildpacks related packages."
 buildpacks:
