@@ -99,6 +99,7 @@ The Engineering Platform package has the following configurable properties.
 | Config | Default | Description |
 |-------|-------------------|-------------|
 | `platform.profile` | `full` | The platform profile to install. Options: `full`, `serving`. |
+| `platform.supply_chain` | `basic` | The type of supply chain to deploy. Options: `basic`, `advanced`. |
 | `platform.namespace` | `kadras-packages` | The namespace where to install the platform. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
 | `platform.ca_cert_data` | `""` | PEM-encoded certificate data to trust TLS connections with a custom CA. |

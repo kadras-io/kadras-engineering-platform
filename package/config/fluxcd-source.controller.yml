@@ -23,7 +23,7 @@ spec:
   packageRef:
     refName: fluxcd-source-controller.packages.kadras.io
     versionSelection:
-      constraints: 0.36.1
+      constraints: 1.0.1+kadras.1
   values:
     - secretRef:
         name: fluxcd-source-controller-values

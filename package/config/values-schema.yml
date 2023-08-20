@@ -7,6 +7,9 @@ platform:
   #@schema/desc "The platform profile to install. Options: `full`, `serving`."
   #@schema/validation one_of=["full", "serving"]
   profile: full
+  #@schema/desc "The type of supply chain to deploy. Options: `basic`, `advanced`."
+  #@schema/validation one_of=["basic", "advanced"]
+  supply_chain: basic
   #@schema/desc "The namespace where to install the platform."
   namespace: kadras-packages
   #@schema/desc "A list of packages to exclude from being installed."

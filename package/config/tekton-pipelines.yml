@@ -30,7 +30,7 @@ spec:
   packageRef:
     refName: tekton-pipelines.packages.kadras.io
     versionSelection:
-      constraints: 0.46.0+kadras.2
+      constraints: 0.49.0
       prereleases: {}
   values:
   - secretRef:

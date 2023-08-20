@@ -8,12 +8,33 @@
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.cartographer.supply_chains)
 #@
+#@   #! Compute values for CA Certificates
+#@   if data.values.platform.ca_cert_data:
+#@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
+#@   end
+#@
+#@   #! Compute values for Supply Chain
+#@   if data.values.platform.supply_chain:
+#@     if not hasattr(data.values.cartographer.supply_chains, "supply_chain") or not data.values.cartographer.supply_chains.supply_chain:
+#@       values["supply_chain"] = data.values.platform.supply_chain
+#@     end
+#@   end
+#@
 #@   #! Compute values for OCI Registry server
 #@   if data.values.platform.oci_registry.server and data.values.platform.oci_registry.repository:
 #@     if not hasattr(data.values.cartographer.supply_chains, "registry") or not hasattr(data.values.cartographer.supply_chains.registry, "server") or not hasattr(data.values.cartographer.supply_chains.registry, "repository") or not data.values.cartographer.supply_chains.registry.server or not data.values.cartographer.supply_chains.registry.repository:
 #@       values["registry"] = {}
 #@       values["registry"]["server"] = data.values.platform.oci_registry.server.rstrip("/")
 #@       values["registry"]["repository"] = data.values.platform.oci_registry.repository.rstrip("/") + "/workloads"
+#@     end
+#@   end
+#@
+#@   #! Compute values for Git server
+#@   if is_any_profile_enabled([profiles.full]):
+#@     if data.values.platform.git.server and data.values.platform.git.secret.name and data.values.platform.git.secret.namespace:
+#@       if not hasattr(data.values.cartographer.supply_chains, "git_credentials_secret") or not data.values.cartographer.supply_chains.git_credentials_secret:
+#@         values["git_credentials_secret"] = data.values.platform.git.secret.name
+#@       end
 #@     end
 #@   end
 #@
@@ -36,7 +57,7 @@ spec:
   packageRef:
     refName: cartographer-supply-chains.packages.kadras.io
     versionSelection:
-      constraints: 0.5.1
+      constraints: 0.6.0
       prereleases: {}
   values:
   - secretRef:

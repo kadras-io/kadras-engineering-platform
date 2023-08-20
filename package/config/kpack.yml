@@ -54,7 +54,7 @@ spec:
   packageRef:
     refName: kpack.packages.kadras.io
     versionSelection:
-      constraints: 0.11.1
+      constraints: 0.11.2+kadras.1
       prereleases: {}
   values:
   - secretRef:
