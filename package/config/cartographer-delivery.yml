@@ -6,7 +6,18 @@
 #@ if is_package_enabled("cartographer-delivery") and is_any_profile_enabled([profiles.full]):
 
 #@ def compute_package_values():
-#@   return data.values.cartographer.delivery
+#@   values = struct.decode(data.values.cartographer.delivery)
+#@
+#@   #! Compute values for Git server
+#@   if is_any_profile_enabled([profiles.full]):
+#@     if data.values.platform.git.server and data.values.platform.git.secret.name and data.values.platform.git.secret.namespace:
+#@       if not hasattr(data.values.cartographer.delivery, "git_credentials_secret") or not data.values.cartographer.delivery.git_credentials_secret:
+#@         values["git_credentials_secret"] = data.values.platform.git.secret.name
+#@       end
+#@     end
+#@   end
+#@
+#@   return struct.encode(values)
 #@ end
 
 ---
@@ -25,7 +36,7 @@ spec:
   packageRef:
     refName: cartographer-delivery.packages.kadras.io
     versionSelection:
-      constraints: 0.4.1
+      constraints: 0.5.0
       prereleases: {}
   values:
   - secretRef:

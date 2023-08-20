@@ -74,8 +74,9 @@ Then, create a Secret with the credentials to access your Git server in read/wri
 
   ```shell
   kubectl create secret generic supply-chain-git-credentials \
-    --from-literal=username"${SUPPLY_CHAIN_REGISTRY_USERNAME}" \
-    --from-literal=password="${SUPPLY_CHAIN_REGISTRY_TOKEN}" \
+    --type=kubernetes.io/basic-auth \
+    --from-literal=username="${SUPPLY_CHAIN_GIT_USERNAME}" \
+    --from-literal=password="${SUPPLY_CHAIN_GIT_TOKEN}" \
     --namespace=kadras-packages
   ```
 
