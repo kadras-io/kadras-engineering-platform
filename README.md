@@ -134,6 +134,7 @@ Each Kadras package included in the platform can be configured independently.
 | `conventions.spring_boot` | `{}` | Configuration for the Spring Boot Conventions package. |
 | `flux.source_controller` | `{}` | Configuration for the FluxCD Source Controller package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
+| `kyverno.core` | `{}` | Configuration for the Kyverno package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
 | `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |

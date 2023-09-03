@@ -131,6 +131,12 @@ knative:
   #@schema/type any=True
   serving: {}
 
+#@schema/desc "Configuration for the Kyverno related packages."
+kyverno:
+  #@schema/desc "Configuration for the Kyverno package."
+  #@schema/type any=True
+  core: {}
+
 #@schema/desc "Configuration for the Metrics Server package."
 #@schema/type any=True
 metrics_server: {}

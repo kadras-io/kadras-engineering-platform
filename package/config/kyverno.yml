@@ -1,0 +1,46 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/helpers.star", "is_package_enabled")
+
+#@ if is_package_enabled("kyverno"):
+
+#@ def compute_package_values():
+#@   values = struct.decode(data.values.kyverno.core)
+#@
+#@   #! Compute values for CA Certificates
+#@   if data.values.platform.ca_cert_data:
+#@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
+#@   end
+#@
+#@   return struct.encode(values)
+#@ end
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: kyverno
+  namespace: #@ data.values.platform.namespace
+  annotations:
+    kapp.k14s.io/change-group: kyverno
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: kyverno.packages.kadras.io
+    versionSelection:
+      constraints: 1.10.3+kadras.1
+  values:
+    - secretRef:
+        name: kyverno-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kyverno-values
+  namespace: #@ data.values.platform.namespace
+stringData:
+  values.yaml: #@ yaml.encode(compute_package_values())
+
+#@ end
