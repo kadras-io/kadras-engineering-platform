@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cert-manager-issuers") and is_any_profile_enabled([profiles.full, profiles.serving]):
+#@ if is_package_enabled("cert-manager-issuers"):
 
 #@ def is_letsencrypt_issuer(issuer):
 #@   return issuer.type == "letsencrypt_staging" or issuer.type == "letsencrypt"

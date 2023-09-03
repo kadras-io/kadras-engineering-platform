@@ -75,7 +75,7 @@ The Engineering Platform package can be customized via a `values.yml` file.
   ```yaml
   platform:
     platform:
-      profile: serving
+      profile: run
     ingress:
       domain: thomasvitale.com
   ```
@@ -98,7 +98,7 @@ The Engineering Platform package has the following configurable properties.
 
 | Config | Default | Description |
 |-------|-------------------|-------------|
-| `platform.profile` | `full` | The platform profile to install. Options: `full`, `serving`. |
+| `platform.profile` | `run` | The platform profile to install. Options: `full`, `dev`, `build`, `run`. |
 | `platform.supply_chain` | `basic` | The type of supply chain to deploy. Options: `basic`, `advanced`. |
 | `platform.namespace` | `kadras-packages` | The namespace where to install the platform. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |

@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("workspace-provisioner") and is_any_profile_enabled([profiles.full, profiles.serving]):
+#@ if is_package_enabled("workspace-provisioner"):
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.workspace_provisioner)
