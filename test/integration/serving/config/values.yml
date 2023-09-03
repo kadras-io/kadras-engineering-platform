@@ -11,3 +11,5 @@ stringData:
       infrastructure_provider: local
       ingress:
         domain: 127.0.0.1.sslip.io
+      excluded_packages:
+        - kyverno
