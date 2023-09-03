@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      ref: main
+      url: https://github.com/kadras-io/kadras-packages
+    includePaths:
+      - repo/packages/**/*
+    newRootPath: repo/packages
+    path: .
+  path: package-repo
+kind: Config
+minimumRequiredVersion: 0.32.0
