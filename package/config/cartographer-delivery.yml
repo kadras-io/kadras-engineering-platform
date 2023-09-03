@@ -30,7 +30,6 @@ metadata:
     kapp.k14s.io/change-group: cartographer-delivery
     kapp.k14s.io/change-rule.cartographer: upsert after upserting cartographer
     kapp.k14s.io/change-rule.cartographer-blueprints: upsert after upserting cartographer-blueprints
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa

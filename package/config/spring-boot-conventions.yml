@@ -17,7 +17,6 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: spring-boot-conventions
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.spring-boot-conventions: upsert after upserting cartographer
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:

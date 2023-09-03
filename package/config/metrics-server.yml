@@ -17,7 +17,6 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: metrics-server
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa

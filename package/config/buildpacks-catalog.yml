@@ -28,7 +28,6 @@ metadata:
   annotations:
     kapp.k14s.io/change-group: buildpacks-catalog
     kapp.k14s.io/change-rule.kpack: upsert after upserting kpack
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount  
 spec:
   serviceAccountName: kadras-install-sa

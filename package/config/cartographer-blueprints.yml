@@ -18,7 +18,6 @@ metadata:
   annotations:
     kapp.k14s.io/change-group: cartographer-blueprints
     kapp.k14s.io/change-rule.cartographer: upsert after upserting cartographer
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
     kapp.k14s.io/change-rule.tekton-catalog: upsert after upserting tekton-catalog
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount

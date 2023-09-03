@@ -36,7 +36,6 @@ metadata:
     kapp.k14s.io/change-group: knative-serving
     kapp.k14s.io/change-rule.cert-manager-issuers: upsert after upserting cert-manager-issuers
     kapp.k14s.io/change-rule.contour: upsert after upserting contour
-    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
