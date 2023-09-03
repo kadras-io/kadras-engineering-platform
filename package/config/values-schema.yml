@@ -42,16 +42,16 @@ platform:
 
   #@schema/desc "Settings for the OCI registry that the platform will use."
   oci_registry:
-    #@schema/desc "The server of the OCI Registry where the platform will publish and consume OCI images."
+    #@schema/desc "The server of the OCI Registry where the platform will publish OCI images."
     #@schema/examples ("GitHub Container Registry", "ghcr.io")
     server: ""
-    #@schema/desc "The repository in the OCI Registry where the platform will publish and consume OCI images."
+    #@schema/desc "The repository in the OCI Registry where the platform will publish OCI images."
     #@schema/examples ("Repository on GitHub Container Registry", "my-org")
     repository: ""
     #@schema/desc "Configuration for the Secret holding the credentials to access the OCI registry."
     secret:
-      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry."
-      name: supply-chain-registry-credentials
+      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `full`, `dev`, `build`."
+      name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the OCI registry."
       namespace: kadras-packages
 
@@ -60,7 +60,7 @@ platform:
     #@schema/desc "Configuration for the Secret holding the Cosign key pair."
     secret:
       #@schema/desc "The name of the Secret holding the Cosign key pair."
-      name: supply-chain-cosign-key-pair
+      name: ""
       #@schema/desc "The namespace of the Secret holding the Cosign key pair."
       namespace: kadras-packages
   
@@ -71,8 +71,8 @@ platform:
     server: https://github.com
     #@schema/desc "Configuration for the Secret holding the credentials to access the Git server."
     secret:
-      #@schema/desc "The name of the Secret holding the credentials to access the Git server."
-      name: supply-chain-git-credentials
+      #@schema/desc "The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `full`, `build`."
+      name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the Git server."
       namespace: kadras-packages
 

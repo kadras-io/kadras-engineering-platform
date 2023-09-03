@@ -9,11 +9,9 @@
 #@   values = struct.decode(data.values.cartographer.delivery)
 #@
 #@   #! Compute values for Git server
-#@   if is_any_profile_enabled([profiles.full]):
-#@     if data.values.platform.git.server and data.values.platform.git.secret.name and data.values.platform.git.secret.namespace:
-#@       if not hasattr(data.values.cartographer.delivery, "git_credentials_secret") or not data.values.cartographer.delivery.git_credentials_secret:
-#@         values["git_credentials_secret"] = data.values.platform.git.secret.name
-#@       end
+#@   if data.values.platform.git.server and data.values.platform.git.secret.name and data.values.platform.git.secret.namespace:
+#@     if not hasattr(data.values.cartographer.delivery, "git_credentials_secret") or not data.values.cartographer.delivery.git_credentials_secret:
+#@       values["git_credentials_secret"] = data.values.platform.git.secret.name
 #@     end
 #@   end
 #@
