@@ -33,6 +33,10 @@ commands:
         -f https://github.com/kadras-io/package-for-knative-serving/releases/latest/download/metadata.yml \
         -f https://github.com/kadras-io/package-for-knative-serving/releases/latest/download/package.yml
   - script: |
+      kapp deploy -a kyverno-package -n kadras-packages -y \
+        -f https://github.com/kadras-io/package-for-kyverno/releases/latest/download/metadata.yml \
+        -f https://github.com/kadras-io/package-for-kyverno/releases/latest/download/package.yml
+  - script: |
       kapp deploy -a metrics-server-package -n kadras-packages -y \
         -f https://github.com/kadras-io/package-for-metrics-server/releases/latest/download/metadata.yml \
         -f https://github.com/kadras-io/package-for-metrics-server/releases/latest/download/package.yml
