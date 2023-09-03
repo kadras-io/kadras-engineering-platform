@@ -119,11 +119,9 @@ conventions:
   #@schema/type any=True
   spring_boot: {}
 
-#@schema/desc "Configuration for Flux related packages."
-flux:
-  #@schema/desc "Configuration for the FluxCD Source Controller package."
-  #@schema/type any=True
-  source_controller: {}
+#@schema/desc "Configuration for the Flux package."
+#@schema/type any=True
+flux: {}
 
 #@schema/desc "Configuration for Knative related packages."
 knative:
