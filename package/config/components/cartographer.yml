@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cartographer") and is_any_profile_enabled([profiles.full]):
+#@ if is_package_enabled("cartographer") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build, profiles.run]):
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.cartographer.core)
@@ -12,6 +12,14 @@
 #@   if data.values.platform.ca_cert_data:
 #@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
 #@   end
+#@
+#@   #! Disable Cartographer Conventions based on profile
+#@   if is_any_profile_enabled([profiles.run]):
+#@     if not hasattr(data.values.cartographer.core, "optional_components") or not data.values.cartographer.core.optional_components or not hasattr(data.values.cartographer.core.optional_components, "cartographer_conventions") or not data.values.cartographer.core.optional_components.cartographer_conventions:
+#@       values["optional_components"] = {}
+#@       values["optional_components"]["cartographer_conventions"] = "false"
+#@     end
+#@   end 
 #@
 #@   return struct.encode(values)
 #@ end

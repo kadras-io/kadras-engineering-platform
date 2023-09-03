@@ -3,7 +3,9 @@ load("@ytt:struct", "struct")
 
 profiles = struct.make(
   full="full",
-  serving="serving"
+  dev="dev",
+  build="build",
+  run="run"
 )
 
 def is_package_enabled(name):

@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-info
+  namespace: #@ data.values.platform.namespace
+data:
+  profile: #@ data.values.platform.profile

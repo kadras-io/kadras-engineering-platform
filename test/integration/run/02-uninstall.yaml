@@ -5,4 +5,4 @@ commands:
   - script: |
       cd ../../../package && \
       kubectl config set-context --current --namespace=tests && \
-      ytt -f ../test/integration/serving/config -f package-resources.yml | kctrl dev -f- --local --delete -y
+      ytt -f ../test/integration/run/config -f package-resources.yml | kctrl dev -f- --local --delete -y

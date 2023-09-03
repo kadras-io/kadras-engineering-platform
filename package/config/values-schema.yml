@@ -4,9 +4,9 @@
 
 #@schema/desc "Configuration for the platform packages."
 platform:
-  #@schema/desc "The platform profile to install. Options: `full`, `serving`."
-  #@schema/validation one_of=["full", "serving"]
-  profile: full
+  #@schema/desc "The platform profile to install. Options: `full`, `dev`, `build`, `run`."
+  #@schema/validation one_of=["full", "dev", "build", "run"]
+  profile: run
   #@schema/desc "The type of supply chain to deploy. Options: `basic`, `advanced`."
   #@schema/validation one_of=["basic", "advanced"]
   supply_chain: basic
