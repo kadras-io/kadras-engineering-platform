@@ -132,7 +132,7 @@ Each Kadras package included in the platform can be configured independently.
 | `cert_manager.issuers` | `{}` | Configuration for the Cert Manager Issuers package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `conventions.spring_boot` | `{}` | Configuration for the Spring Boot Conventions package. |
-| `flux.source_controller` | `{}` | Configuration for the FluxCD Source Controller package. |
+| `flux` | `{}` | Configuration for the Flux package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `kyverno.core` | `{}` | Configuration for the Kyverno package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |

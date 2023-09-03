@@ -3,35 +3,35 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("fluxcd-source-controller") and is_any_profile_enabled([profiles.full]):
+#@ if is_package_enabled("flux") and is_any_profile_enabled([profiles.full, profiles.serving]):
 
 #@ def compute_package_values():
-#@   return data.values.flux.source_controller
+#@   return data.values.flux
 #@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: fluxcd-source-controller
+  name: flux
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: fluxcd
+    kapp.k14s.io/change-group: flux
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: fluxcd-source-controller.packages.kadras.io
+    refName: flux.packages.kadras.io
     versionSelection:
-      constraints: 1.0.1+kadras.1
+      constraints: 2.1.0+kadras.1
   values:
     - secretRef:
-        name: fluxcd-source-controller-values
+        name: flux-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: fluxcd-source-controller-values
+  name: flux-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())
