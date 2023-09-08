@@ -12,7 +12,7 @@ A curated set of Carvel packages to build an engineering platform supporting app
 
 ### Prerequisites
 
-* Kubernetes 1.25+
+* Kubernetes 1.26+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
@@ -77,7 +77,7 @@ The Engineering Platform package can be customized via a `values.yml` file.
     platform:
       profile: run
     ingress:
-      domain: thomasvitale.com
+      domain: platform.kadras.io
   ```
 
 Reference the `values.yml` file from the `kctrl` command when installing or upgrading the package.
@@ -98,7 +98,7 @@ The Engineering Platform package has the following configurable properties.
 
 | Config | Default | Description |
 |-------|-------------------|-------------|
-| `platform.profile` | `run` | The platform profile to install. Options: `full`, `dev`, `build`, `run`. |
+| `platform.profile` | `run` | The platform profile to install. Options: `standalone`, `dev`, `build`, `run`. |
 | `platform.supply_chain` | `basic` | The type of supply chain to deploy. Options: `basic`, `advanced`. |
 | `platform.namespace` | `kadras-packages` | The namespace where to install the platform. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
@@ -110,12 +110,12 @@ The Engineering Platform package has the following configurable properties.
 | `platform.ingress.issuer.email` | `""` | The email address that Let's Encrypt will use to send info on expiring certificates or other issues. Required when the type is `letsencrypt_staging` or `letsencrypt`. |
 | `platform.oci_registry.server` | `""` | The server of the OCI Registry where the platform will publish OCI images. Example: "ghcr.io". |
 | `platform.oci_registry.repository` | `""` | The repository in the OCI Registry where the platform will publish OCI images. Example: "my-org". |
-| `platform.oci_registry.secret.name` | `""` | The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `full`, `dev`, `build`. |
+| `platform.oci_registry.secret.name` | `""` | The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `standalone`, `dev`, `build`. |
 | `platform.oci_registry.secret.namespace` | `kadras-packages` | The namespace of the Secret holding the credentials to access the OCI registry. |
 | `platform.cosign.secret.name` | `""` | The name of the Secret holding the Cosign key pair. |
 | `platform.cosign.secret.namespace` | `kadras-packages` | The namespace of the Secret holding the Cosign key pair. |
 | `platform.git.server` | `https://github.com` | The server hosting the Git repositories used by the plaform. |
-| `platform.git.secret.name` | `""` | The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `full`, `build`. |
+| `platform.git.secret.name` | `""` | The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `standalone`, `build`. |
 | `platform.git.secret.namespace` | `kadras-packages` | The namespace of the Secret holding the credentials to access the Git server. |
 
 Each Kadras package included in the platform can be configured independently.

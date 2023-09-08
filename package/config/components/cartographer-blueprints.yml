@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cartographer-blueprints") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build, profiles.run]):
+#@ if is_package_enabled("cartographer-blueprints") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.build]):
 
 #@ def compute_package_values():
 #@   return data.values.cartographer.blueprints
@@ -26,7 +26,7 @@ spec:
   packageRef:
     refName: cartographer-blueprints.packages.kadras.io
     versionSelection:
-      constraints: 0.6.1
+      constraints: 0.7.4
       prereleases: {}
   values:
   - secretRef:

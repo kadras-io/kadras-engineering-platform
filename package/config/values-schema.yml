@@ -4,8 +4,8 @@
 
 #@schema/desc "Configuration for the platform packages."
 platform:
-  #@schema/desc "The platform profile to install. Options: `full`, `dev`, `build`, `run`."
-  #@schema/validation one_of=["full", "dev", "build", "run"]
+  #@schema/desc "The platform profile to install. Options: `standalone`, `dev`, `build`, `run`."
+  #@schema/validation one_of=["standalone", "dev", "build", "run"]
   profile: run
   #@schema/desc "The type of supply chain to deploy. Options: `basic`, `advanced`."
   #@schema/validation one_of=["basic", "advanced"]
@@ -50,7 +50,7 @@ platform:
     repository: ""
     #@schema/desc "Configuration for the Secret holding the credentials to access the OCI registry."
     secret:
-      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `full`, `dev`, `build`."
+      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `standalone`, `dev`, `build`."
       name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the OCI registry."
       namespace: kadras-packages
@@ -71,7 +71,7 @@ platform:
     server: https://github.com
     #@schema/desc "Configuration for the Secret holding the credentials to access the Git server."
     secret:
-      #@schema/desc "The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `full`, `build`."
+      #@schema/desc "The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `standalone`, `build`."
       name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the Git server."
       namespace: kadras-packages

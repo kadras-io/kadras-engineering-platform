@@ -62,7 +62,7 @@ spec:
   packageRef:
     refName: workspace-provisioner.packages.kadras.io
     versionSelection:
-      constraints: 0.2.1
+      constraints: 0.3.0
   values:
     - secretRef:
         name: workspace-provisioner-values

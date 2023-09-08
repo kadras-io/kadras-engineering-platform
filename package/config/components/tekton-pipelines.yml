@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("tekton-pipelines") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build]):
+#@ if is_package_enabled("tekton-pipelines") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.build]):
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.tekton.pipelines)
@@ -30,7 +30,7 @@ spec:
   packageRef:
     refName: tekton-pipelines.packages.kadras.io
     versionSelection:
-      constraints: 0.49.0
+      constraints: 0.51.0
       prereleases: {}
   values:
   - secretRef:
