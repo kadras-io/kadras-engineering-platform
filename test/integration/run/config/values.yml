@@ -12,8 +12,5 @@ stringData:
       ingress:
         domain: 127.0.0.1.sslip.io
       excluded_packages:
-        - cartographer-blueprints
-        - cartographer-delivery
-        - cartographer
         - flux
         - kyverno

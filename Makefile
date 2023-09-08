@@ -1,4 +1,4 @@
-K8S_VERSION=v1.27
+K8S_VERSION=v1.28
 
 # Build package configuration
 build: package
@@ -12,7 +12,28 @@ prepare: test/setup
 
 # Inner development loop
 dev: package
+	kubectl config set-context --current --namespace=tests
 	cd package && kctrl dev -f package-resources.yml --local -y
+
+# Install e2e with 'standalone' profile
+e2e-standalone: package
+	kubectl config set-context --current --namespace=tests
+	cd package && ytt -f ../test/e2e/standalone -f package-resources.yml | kctrl dev -f- --local -y
+
+# Install e2e with 'dev' profile
+e2e-dev: package
+	kubectl config set-context --current --namespace=tests
+	cd package && ytt -f ../test/e2e/dev -f package-resources.yml | kctrl dev -f- --local -y
+
+# Install e2e with 'build' profile
+e2e-build: package
+	kubectl config set-context --current --namespace=tests
+	cd package && ytt -f ../test/e2e/build -f package-resources.yml | kctrl dev -f- --local -y
+
+# Install e2e with 'run' profile
+e2e-run: package
+	kubectl config set-context --current --namespace=tests
+	cd package && ytt -f ../test/e2e/run -f package-resources.yml | kctrl dev -f- --local -y
 
 # Clean development environment
 clean:

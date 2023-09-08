@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("tekton-catalog") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build]):
+#@ if is_package_enabled("tekton-catalog") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.build]):
 
 #@ def compute_package_values():
 #@   return data.values.tekton.catalog
@@ -24,7 +24,7 @@ spec:
   packageRef:
     refName: tekton-catalog.packages.kadras.io
     versionSelection:
-      constraints: 0.2.1
+      constraints: 0.2.2
       prereleases: {}
   values:
   - secretRef:

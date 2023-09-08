@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cartographer-supply-chains") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build]):
+#@ if is_package_enabled("cartographer-supply-chains") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.build]):
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.cartographer.supply_chains)
@@ -55,7 +55,7 @@ spec:
   packageRef:
     refName: cartographer-supply-chains.packages.kadras.io
     versionSelection:
-      constraints: 0.6.0
+      constraints: 0.7.2
       prereleases: {}
   values:
   - secretRef:

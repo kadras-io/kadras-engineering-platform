@@ -2,7 +2,7 @@
 
 ## 1. Prerequisites
 
-* Kubernetes 1.25+
+* Kubernetes 1.26+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Sigstore [`cosign`](https://docs.sigstore.dev/cosign/installation/) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
@@ -22,7 +22,7 @@ Add the Kadras repository to make all the platform packages available to the clu
     -n kadras-packages --create-namespace
   ```
 
-You can check the full list of available packages as follows.
+You can check the standalone list of available packages as follows.
 
   ```shell
   kctrl package available list -n kadras-packages 

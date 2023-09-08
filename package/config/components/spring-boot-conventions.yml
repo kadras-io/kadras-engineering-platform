@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("spring-boot-conventions") and is_any_profile_enabled([profiles.full, profiles.dev, profiles.build]):
+#@ if is_package_enabled("spring-boot-conventions") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.build]):
 
 #@ def compute_package_values():
 #@   return data.values.conventions.spring_boot
@@ -24,7 +24,7 @@ spec:
   packageRef:
     refName: spring-boot-conventions.packages.kadras.io
     versionSelection:
-      constraints: 0.3.0
+      constraints: 0.3.1
   values:
     - secretRef:
         name: spring-boot-conventions-values

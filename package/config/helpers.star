@@ -2,7 +2,7 @@ load("@ytt:data", "data")
 load("@ytt:struct", "struct")
 
 profiles = struct.make(
-  full="full",
+  standalone="standalone",
   dev="dev",
   build="build",
   run="run"

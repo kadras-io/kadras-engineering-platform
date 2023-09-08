@@ -3,36 +3,36 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("secretgen-controller"):
+#@ if is_package_enabled("rbac-configurer"):
 
 #@ def compute_package_values():
-#@   return data.values.secretgen_controller
+#@   return data.values.metrics_server
 #@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: secretgen-controller
+  name: rbac-configurer
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: secretgen-controller
+    kapp.k14s.io/change-group: rbac-configurer
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: secretgen-controller.packages.kadras.io
+    refName: rbac-configurer.packages.kadras.io
     versionSelection:
-      constraints: 0.14.10
+      constraints: 0.2.1
       prereleases: {}
   values:
   - secretRef:
-      name: secretgen-controller-values
+      name: rbac-configurer-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: secretgen-controller-values
+  name: rbac-configurer-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())
