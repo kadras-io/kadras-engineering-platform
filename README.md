@@ -125,8 +125,6 @@ Each Kadras package included in the platform can be configured independently.
 | `buildpacks.catalog` | `{}` | Configuration for the Buildpacks Catalog package. |
 | `buildpacks.kpack` | `{}` | Configuration for the Kpack package. |
 | `cartographer.core` | `{}` | Configuration for the Cartographer Core package including Cartographer and Cartographer Conventions. |
-| `cartographer.blueprints` | `{}` | Configuration for the Cartographer Blueprints package. |
-| `cartographer.delivery` | `{}` | Configuration for the Cartographer Delivery package. |
 | `cartographer.supply_chains` | `{}` | Configuration for the Cartographer Supply Chains package. |
 | `cert_manager.core` | `{}` | Configuration for the Cert Manager package. |
 | `cert_manager.issuers` | `{}` | Configuration for the Cert Manager Issuers package. |

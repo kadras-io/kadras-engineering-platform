@@ -90,12 +90,6 @@ cartographer:
   #@schema/desc "Configuration for the Cartographer Core package including Cartographer and Cartographer Conventions."
   #@schema/type any=True
   core: {}
-  #@schema/desc "Configuration for the Cartographer Blueprints package."
-  #@schema/type any=True
-  blueprints: {}
-  #@schema/desc "Configuration for the Cartographer Delivery package."
-  #@schema/type any=True
-  delivery: {}
   #@schema/desc "Configuration for the Cartographer Supply Chains package."
   #@schema/type any=True
   supply_chains: {}
