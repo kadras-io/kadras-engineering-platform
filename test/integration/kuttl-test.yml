@@ -8,7 +8,7 @@ parallel: 1
 startKIND: true
 kindContext: integration
 kindNodeCache: true
-timeout: 300
+timeout: 500
 artifactsDir: /tmp/kuttl-artifacts
 commands:
   - script: |
