@@ -3,16 +3,10 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_additional("kyverno"):
+#@ if is_package_additional("crossplane"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.kyverno.core)
-#@
-#@   #! Compute values for CA Certificates
-#@   if data.values.platform.ca_cert_data:
-#@     values["ca_cert_data"] = values["ca_cert_data"] + data.values.platform.ca_cert_data
-#@   end
-#@
+#@   values = struct.decode(data.values.crossplane)
 #@   return struct.encode(values)
 #@ end
 
@@ -20,25 +14,26 @@
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: kyverno
+  name: crossplane
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: kyverno
+    kapp.k14s.io/change-group: crossplane
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: kyverno.packages.kadras.io
+    refName: crossplane.packages.kadras.io
     versionSelection:
-      constraints: 1.11.4
+      constraints: 1.15.0
   values:
     - secretRef:
-        name: kyverno-values
+        name: crossplane-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kyverno-values
+  name: crossplane-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())

@@ -8,6 +8,10 @@ profiles = struct.make(
   run="run"
 )
 
+def is_package_additional(name):
+  return (name in data.values.platform.additional_packages) and is_package_enabled(name)
+end
+
 def is_package_enabled(name):
   return (name not in data.values.platform.excluded_packages)
 end

@@ -12,6 +12,9 @@ platform:
   supply_chain: basic
   #@schema/desc "The namespace where to install the platform."
   namespace: kadras-packages
+  #@schema/desc "A list of packages to include in the installation."
+  additional_packages:
+    - ""
   #@schema/desc "A list of packages to exclude from being installed."
   excluded_packages:
     - ""
@@ -112,6 +115,14 @@ conventions:
   #@schema/desc "Configuration for the Spring Boot Conventions package."
   #@schema/type any=True
   spring_boot: {}
+
+#@schema/desc "Configuration for the Crossplane package."
+#@schema/type any=True
+crossplane: {}
+
+#@schema/desc "Configuration for the Dapr package."
+#@schema/type any=True
+dapr: {}
 
 #@schema/desc "Configuration for the Flux package."
 #@schema/type any=True

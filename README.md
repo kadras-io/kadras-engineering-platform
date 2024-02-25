@@ -12,7 +12,7 @@ A curated set of Carvel packages to build an engineering platform supporting app
 
 ### Prerequisites
 
-* Kubernetes 1.26+
+* Kubernetes 1.27+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
@@ -130,6 +130,8 @@ Each Kadras package included in the platform can be configured independently.
 | `cert_manager.issuers` | `{}` | Configuration for the Cert Manager Issuers package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `conventions.spring_boot` | `{}` | Configuration for the Spring Boot Conventions package. |
+| `crossplane` | `{}` | Configuration for the Crossplane package. |
+| `dapr` | `{}` | Configuration for the Dapr package. |
 | `flux` | `{}` | Configuration for the Flux package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `kyverno.core` | `{}` | Configuration for the Kyverno package. |

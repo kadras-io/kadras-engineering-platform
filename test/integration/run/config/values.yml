@@ -13,4 +13,3 @@ stringData:
         domain: 127.0.0.1.sslip.io
       excluded_packages:
         - flux
-        - kyverno

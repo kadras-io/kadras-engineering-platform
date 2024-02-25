@@ -1,4 +1,4 @@
-K8S_VERSION=v1.28
+K8S_VERSION=v1.29
 
 # Build package configuration
 build: package
