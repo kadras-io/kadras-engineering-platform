@@ -25,7 +25,7 @@ spec:
   packageRef:
     refName: crossplane.packages.kadras.io
     versionSelection:
-      constraints: 1.15.0
+      constraints: 1.15.0+kadras.2
   values:
     - secretRef:
         name: crossplane-values

@@ -132,13 +132,17 @@ Each Kadras package included in the platform can be configured independently.
 | `conventions.spring_boot` | `{}` | Configuration for the Spring Boot Conventions package. |
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
 | `dapr` | `{}` | Configuration for the Dapr package. |
+| `developer_portal` | `{}` | Configuration for the Developer Portal package. |
 | `flux` | `{}` | Configuration for the Flux package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `kyverno.core` | `{}` | Configuration for the Kyverno package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
+| `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
+| `service_binding` | `{}` | Configuration for the Service Binding package. |
 | `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |
 | `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
+| `weaviate` | `{}` | Configuration for the Weaviate package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
 </details>

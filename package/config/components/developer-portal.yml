@@ -3,10 +3,10 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_additional("dapr"):
+#@ if is_package_additional("developer-portal"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.dapr)
+#@   values = struct.decode(data.values.developer_portal)
 #@   return struct.encode(values)
 #@ end
 
@@ -14,26 +14,27 @@
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: dapr
+  name: developer-portal
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: dapr
+    kapp.k14s.io/change-group: developer-portal
     kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.contour: upsert after upserting contour
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: dapr.packages.kadras.io
+    refName: developer-portal.packages.kadras.io
     versionSelection:
-      constraints: 1.13.0
+      constraints: 0.1.0
   values:
     - secretRef:
-        name: dapr-values
+        name: developer-portal-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: dapr-values
+  name: developer-portal-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())
