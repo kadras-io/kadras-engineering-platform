@@ -18,5 +18,5 @@ commands:
       cd test/setup/dependencies
       vendir sync
   - script: |
-      kubectl create namespace kadras-packages
-      kapp deploy -a kadras-packages -n kadras-packages -f test/setup/dependencies/package-repo -y
+      kubectl create namespace kadras-system
+      kapp deploy -a kadras-packages -n kadras-system -f test/setup/dependencies/package-repo -y

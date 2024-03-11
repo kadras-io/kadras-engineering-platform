@@ -5,10 +5,6 @@
 
 #@ if is_package_enabled("rbac-configurer"):
 
-#@ def compute_package_values():
-#@   return data.values.metrics_server
-#@ end
-
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
@@ -25,16 +21,5 @@ spec:
     versionSelection:
       constraints: 0.2.1
       prereleases: {}
-  values:
-  - secretRef:
-      name: rbac-configurer-values
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: rbac-configurer-values
-  namespace: #@ data.values.platform.namespace
-stringData:
-  values.yaml: #@ yaml.encode(compute_package_values())
 
 #@ end

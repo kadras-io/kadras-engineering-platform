@@ -11,15 +11,15 @@ platform:
     repository: "my-org"
     secret:
       name: supply-chain-registry-credentials
-      namespace: kadras-packages
+      namespace: kadras-system
 
   cosign:
     secret:
       name: supply-chain-cosign-key-pair
-      namespace: kadras-packages
+      namespace: kadras-system
   
   git:
     server: https://github.com
     secret:
       name: supply-chain-git-credentials
-      namespace: kadras-packages
+      namespace: kadras-system

@@ -7,15 +7,6 @@
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.flux)
-#@
-#@   #! Disable Kustomize Controller based on profile
-#@   if is_any_profile_enabled([profiles.dev]):
-#@     if not hasattr(data.values.flux, "optional_components") or not data.values.flux.optional_components or not hasattr(data.values.flux.optional_components, "kustomize_controller") or not data.values.flux.optional_components.kustomize_controller:
-#@       values["optional_components"] = {}
-#@       values["optional_components"]["kustomize_controller"] = False
-#@     end
-#@   end 
-#@
 #@   return struct.encode(values)
 #@ end
 

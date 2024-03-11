@@ -3,6 +3,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: platform-info
-  namespace: kadras-packages
+  namespace: kadras-system
 data:
   profile: run

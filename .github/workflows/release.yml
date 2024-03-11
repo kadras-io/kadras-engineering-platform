@@ -14,10 +14,10 @@ jobs:
     uses: kadras-io/github-reusable-workflows/.github/workflows/package-release.yml@main
     with:
       package-name-slug: engineering-platform
-      package-name-display: Engineering Platform
+      package-name-display: Kadras Engineering Platform
       registry-server: ghcr.io
       registry-username: ${{ github.actor }}
       image: ${{ github.repository }}
-      version: 0.14.0
+      version: 0.15.0
     secrets:
       pull-request-token: ${{ secrets.GH_ORG_PAT }}

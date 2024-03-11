@@ -3,7 +3,7 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "get_issuer_name", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("knative-serving") and is_any_profile_enabled([profiles.standalone, profiles.dev, profiles.run]):
+#@ if is_package_enabled("knative-serving") and is_any_profile_enabled([profiles.standalone, profiles.run]):
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.knative.serving)

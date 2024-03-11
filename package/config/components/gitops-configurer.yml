@@ -3,36 +3,36 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_enabled("cert-manager"):
+#@ if is_package_enabled("flux") and is_package_enabled("gitops-configurer"):
 
 #@ def compute_package_values():
-#@   return data.values.cert_manager.core
+#@   return data.values.gitops_configurer
 #@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: cert-manager
+  name: gitops-configurer
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: cert-manager
-    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+    kapp.k14s.io/change-group: gitops-configurer
+    kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: cert-manager.packages.kadras.io
+    refName: gitops-configurer.packages.kadras.io
     versionSelection:
-      constraints: 1.14.4
+      constraints: 0.1.0
       prereleases: {}
   values:
-    - secretRef:
-        name: cert-manager-values
+  - secretRef:
+      name: gitops-configurer-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cert-manager-values
+  name: gitops-configurer-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())

@@ -4,14 +4,11 @@
 
 #@schema/desc "Configuration for the platform packages."
 platform:
-  #@schema/desc "The platform profile to install. Options: `standalone`, `dev`, `build`, `run`."
-  #@schema/validation one_of=["standalone", "dev", "build", "run"]
+  #@schema/desc "The platform profile to install. Options: `standalone`, `build`, `run`."
+  #@schema/validation one_of=["standalone", "build", "run"]
   profile: run
-  #@schema/desc "The type of supply chain to deploy. Options: `basic`, `advanced`."
-  #@schema/validation one_of=["basic", "advanced"]
-  supply_chain: basic
   #@schema/desc "The namespace where to install the platform."
-  namespace: kadras-packages
+  namespace: kadras-system
   #@schema/desc "A list of packages to include in the installation."
   additional_packages:
     - ""
@@ -56,7 +53,7 @@ platform:
       #@schema/desc "The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `standalone`, `dev`, `build`."
       name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the OCI registry."
-      namespace: kadras-packages
+      namespace: kadras-system
 
   #@schema/desc "Settings for Cosign, used for signing and verifying OCI artifacts."
   cosign:
@@ -65,7 +62,7 @@ platform:
       #@schema/desc "The name of the Secret holding the Cosign key pair."
       name: ""
       #@schema/desc "The namespace of the Secret holding the Cosign key pair."
-      namespace: kadras-packages
+      namespace: kadras-system
   
   #@schema/desc "Settings for the Git server that the platform will use."
   git:
@@ -77,7 +74,7 @@ platform:
       #@schema/desc "The name of the Secret holding the credentials to access the Git server. The credentials should provide read-only access to the Git server except when installing the platform with one of these profiles: `standalone`, `build`."
       name: ""
       #@schema/desc "The namespace of the Secret holding the credentials to access the Git server."
-      namespace: kadras-packages
+      namespace: kadras-system
 
 #@schema/desc "Configuration for Buildpacks related packages."
 buildpacks:
@@ -87,15 +84,6 @@ buildpacks:
   #@schema/desc "Configuration for the Kpack package."
   #@schema/type any=True
   kpack: {}
-
-#@schema/desc "Configuration for Cartographer related packages."
-cartographer:
-  #@schema/desc "Configuration for the Cartographer Core package including Cartographer and Cartographer Conventions."
-  #@schema/type any=True
-  core: {}
-  #@schema/desc "Configuration for the Cartographer Supply Chains package."
-  #@schema/type any=True
-  supply_chains: {}
 
 #@schema/desc "Configuration for the Cert Manager related packages."
 cert_manager:
@@ -109,12 +97,6 @@ cert_manager:
 #@schema/desc "Configuration for the Contour package."
 #@schema/type any=True
 contour: {}
-
-#@schema/desc "Configuration for Cartographer Conventions related packages."
-conventions:
-  #@schema/desc "Configuration for the Spring Boot Conventions package."
-  #@schema/type any=True
-  spring_boot: {}
 
 #@schema/desc "Configuration for the Crossplane package."
 #@schema/type any=True
@@ -131,6 +113,10 @@ developer_portal: {}
 #@schema/desc "Configuration for the Flux package."
 #@schema/type any=True
 flux: {}
+
+#@schema/desc "Configuration for the GitOps Configurer package."
+#@schema/type any=True
+gitops_configurer: {}
 
 #@schema/desc "Configuration for Knative related packages."
 knative:
