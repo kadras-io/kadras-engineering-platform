@@ -1,9 +1,9 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
+#@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_enabled("flux") and is_package_enabled("gitops-configurer"):
+#@ if is_package_additional("gitops-configurer"):
 
 #@ def compute_package_values():
 #@   return data.values.gitops_configurer
