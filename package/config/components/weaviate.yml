@@ -18,6 +18,7 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: weaviate
+    kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
