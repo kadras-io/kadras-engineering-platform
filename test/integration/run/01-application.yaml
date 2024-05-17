@@ -9,6 +9,6 @@ spec:
     spec:
       containers:
         - name: band-service
-          image: ghcr.io/thomasvitale/band-service
+          image: ghcr.io/knative/helloworld-go
           ports:
             - containerPort: 8080

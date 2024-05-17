@@ -134,6 +134,10 @@ kyverno:
 #@schema/type any=True
 metrics_server: {}
 
+#@schema/desc "Configuration for the PostgreSQL Operator package."
+#@schema/type any=True
+postgresql_operator: {}
+
 #@schema/desc "Configuration for the RabbitMQ Operator package."
 #@schema/type any=True
 rabbitmq_operator: {}

@@ -3,10 +3,10 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_additional("crossplane"):
+#@ if is_package_additional("postgresql-operator"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.crossplane)
+#@   values = struct.decode(data.values.postgresql_operator)
 #@   return struct.encode(values)
 #@ end
 
@@ -14,26 +14,25 @@
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: crossplane
+  name: postgresql-operator
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: crossplane
-    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-group: postgresql-operator
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: crossplane.packages.kadras.io
+    refName: postgresql-operator.packages.kadras.io
     versionSelection:
-      constraints: 1.16.0
+      constraints: 1.23.1
   values:
     - secretRef:
-        name: crossplane-values
+        name: postgresql-operator-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: crossplane-values
+  name: postgresql-operator-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())
