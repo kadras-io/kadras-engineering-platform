@@ -35,7 +35,8 @@ spec:
   - internal developer platform
   - application platform
   displayName: engineering-platform
-  longDescription: A cloud native platform aimed at supporting application developers with paved paths to production on Kubernetes and shipped as a Carvel package.
+  longDescription: A cloud native platform aimed at supporting application developers
+    with paved paths to production on Kubernetes and shipped as a Carvel package.
   maintainers:
   - name: Thomas Vitale
   providerName: Kadras

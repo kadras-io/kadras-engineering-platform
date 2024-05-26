@@ -20,11 +20,6 @@ e2e-standalone: package
 	kubectl config set-context --current --namespace=tests
 	cd package && ytt -f ../test/e2e/standalone -f package-resources.yml | kctrl dev -f- --local -y
 
-# Install e2e with 'dev' profile
-e2e-dev: package
-	kubectl config set-context --current --namespace=tests
-	cd package && ytt -f ../test/e2e/dev -f package-resources.yml | kctrl dev -f- --local -y
-
 # Install e2e with 'build' profile
 e2e-build: package
 	kubectl config set-context --current --namespace=tests
