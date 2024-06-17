@@ -1,7 +1,6 @@
 ---
 
 platform:
-  infrastructure_provider: local
 
   ingress:
     domain: kadras.io
@@ -23,3 +22,8 @@ platform:
     secret:
       name: supply-chain-git-credentials
       namespace: kadras-system
+
+contour:
+  envoy:
+    service:
+      type: NodePort

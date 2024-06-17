@@ -34,7 +34,7 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: knative-serving
-    kapp.k14s.io/change-rule.cert-manager-issuers: upsert after upserting cert-manager-issuers
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
     kapp.k14s.io/change-rule.contour: upsert after upserting contour
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
@@ -42,7 +42,7 @@ spec:
   packageRef:
     refName: knative-serving.packages.kadras.io
     versionSelection:
-      constraints: 1.14.0
+      constraints: 1.14.1
   values:
     - secretRef:
         name: knative-serving-values

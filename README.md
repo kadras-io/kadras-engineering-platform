@@ -102,7 +102,6 @@ The Engineering Platform package has the following configurable properties.
 | `platform.namespace` | `kadras-system` | The namespace where to install the platform. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
 | `platform.ca_cert_data` | `""` | PEM-encoded certificate data to trust TLS connections with a custom CA. |
-| `platform.infrastructure_provider` | `""` | The underlying infrastructure provider. Options are `local` and `vsphere`. This field is not required, but it enables better validation and defaulting if provided. |
 | `platform.ingress.domain` | `""` | The base domain name the platform will use to configure the Ingress controller. It must be a valid DNS name. |
 | `platform.ingress.issuer.type` | `private` | The type of ClusterIssuer the platform will use to enable TLS communications. Options: `private`, `letsencrypt_staging`, `letsencrypt`, `custom`. |
 | `platform.ingress.issuer.name` | `""` | A reference to a custom ClusterIssuer previously created on the cluster where the platform will be installed. Required when the type is `custom`. |
@@ -123,8 +122,7 @@ Each Kadras package included in the platform can be configured independently.
 |-------|-------------------|-------------|
 | `buildpacks.catalog` | `{}` | Configuration for the Buildpacks Catalog package. |
 | `buildpacks.kpack` | `{}` | Configuration for the Kpack package. |
-| `cert_manager.core` | `{}` | Configuration for the Cert Manager package. |
-| `cert_manager.issuers` | `{}` | Configuration for the Cert Manager Issuers package. |
+| `cert_manager` | `{}` | Configuration for the Cert Manager package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
 | `dapr` | `{}` | Configuration for the Dapr package. |

@@ -25,7 +25,7 @@ spec:
   packageRef:
     refName: weaviate.packages.kadras.io
     versionSelection:
-      constraints: 1.25.1
+      constraints: 1.25.4
   values:
     - secretRef:
         name: weaviate-values

@@ -5,8 +5,31 @@
 
 #@ if is_package_enabled("cert-manager"):
 
+#@ def is_letsencrypt_issuer(issuer):
+#@   return issuer.type == "letsencrypt_staging" or issuer.type == "letsencrypt"
+#@ end
+
+#@ def is_letsencrypt_production(issuer):
+#@   if issuer.type == "letsencrypt_staging":
+#@     return False
+#@   else:
+#@     return True
+#@   end
+#@ end
+
 #@ def compute_package_values():
-#@   return data.values.cert_manager.core
+#@   values = struct.decode(data.values.cert_manager)
+#@
+#@   if data.values.platform.ingress.issuer and is_letsencrypt_issuer(data.values.platform.ingress.issuer) and data.values.platform.ingress.issuer.email:
+#@     if not hasattr(data.values.cert_manager, "letsencrypt") or not hasattr(data.values.cert_manager.letsencrypt, "include") or not data.values.cert_manager.letsencrypt.include:
+#@       values["letsencrypt"] = {}
+#@       values["letsencrypt"]["include"] = True
+#@       values["letsencrypt"]["production"] = is_letsencrypt_production(data.values.platform.ingress.issuer)
+#@       values["letsencrypt"]["email"] = data.values.platform.ingress.issuer.email
+#@     end
+#@   end
+#@
+#@   return struct.encode(values)
 #@ end
 
 ---
@@ -23,7 +46,7 @@ spec:
   packageRef:
     refName: cert-manager.packages.kadras.io
     versionSelection:
-      constraints: 1.14.5
+      constraints: 1.15.0+kadras.1
       prereleases: {}
   values:
     - secretRef:

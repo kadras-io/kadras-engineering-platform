@@ -19,11 +19,6 @@ platform:
   #@schema/desc "PEM-encoded certificate data to trust TLS connections with a custom CA."
   ca_cert_data: ""
 
-  #@schema/desc "The underlying infrastructure provider. Options are `local` and `vsphere`. This field is not required, but it enables better validation and defaulting if provided."
-  #@schema/validation one_of=["local", "vsphere"]
-  #@schema/nullable
-  infrastructure_provider: ""
-
   #@schema/desc "Setting for the Ingress controller that the platform will use."
   ingress:
     #@schema/desc "The base domain name the platform will use to configure the Ingress controller. It must be a valid DNS name."
@@ -85,14 +80,9 @@ buildpacks:
   #@schema/type any=True
   kpack: {}
 
-#@schema/desc "Configuration for the Cert Manager related packages."
-cert_manager:
-  #@schema/desc "Configuration for the Cert Manager package."
-  #@schema/type any=True
-  core: {}
-  #@schema/desc "Configuration for the Cert Manager Issuers package."
-  #@schema/type any=True
-  issuers: {}
+#@schema/desc "Configuration for the Cert Manager package."
+#@schema/type any=True
+cert_manager: {}
 
 #@schema/desc "Configuration for the Contour package."
 #@schema/type any=True

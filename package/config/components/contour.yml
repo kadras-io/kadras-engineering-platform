@@ -15,10 +15,6 @@
 #@     end
 #@   end
 #@
-#@   if not hasattr(data.values.contour, "infrastructure_provider"):
-#@     values["infrastructure_provider"] = data.values.platform.infrastructure_provider
-#@   end
-#@
 #@   return struct.encode(values)
 #@ end
 
@@ -37,7 +33,7 @@ spec:
   packageRef:
     refName: contour.packages.kadras.io
     versionSelection:
-      constraints: 1.29.0
+      constraints: 1.29.1
   values:
     - secretRef:
         name: contour-values

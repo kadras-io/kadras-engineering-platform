@@ -50,7 +50,7 @@ Add the Kadras repository to make the platform packages available to the cluster
 
   ```shell
   kctrl package repository add -r kadras-packages \
-    --url ghcr.io/kadras-io/kadras-packages:0.18.0 \
+    --url ghcr.io/kadras-io/kadras-packages:0.19.0 \
     -n kadras-system --create-namespace
   ```
 
@@ -61,9 +61,12 @@ The installation of the Kadras Engineering Platform can be configured via YAML. 
 ```yaml title="values.yml"
 platform:
   profile: run
-  infrastructure_provider: local
   ingress:
     domain: 127.0.0.1.sslip.io
+contour:
+  envoy:
+    service:
+      type: NodePort
 ```
 
 The Ingress is configured with the special domain `127.0.0.1.sslip.io` which will resolve to your localhost and be accessible via the kind cluster.
@@ -75,7 +78,7 @@ Reference the `values.yml` file you created in the previous step and install the
   ```shell
   kctrl package install -i engineering-platform \
     -p engineering-platform.packages.kadras.io \
-    -v 0.16.0 \
+    -v 0.17.0 \
     -n kadras-system \
     --values-file values.yml
   ```
