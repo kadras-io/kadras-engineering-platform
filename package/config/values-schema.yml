@@ -146,10 +146,6 @@ tekton:
   #@schema/type any=True
   pipelines: {}
 
-#@schema/desc "Configuration for the Weaviate package."
-#@schema/type any=True
-weaviate: {}
-
 #@schema/desc "Configuration for the Workspace Provisioner package."
 #@schema/type any=True
 workspace_provisioner: {}

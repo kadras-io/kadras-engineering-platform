@@ -34,7 +34,7 @@ spec:
   packageRef:
     refName: buildpacks-catalog.packages.kadras.io
     versionSelection:
-      constraints: 0.12.0
+      constraints: 0.12.1
       prereleases: {}
   values:
   - secretRef:

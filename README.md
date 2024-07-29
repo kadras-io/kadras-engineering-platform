@@ -137,7 +137,6 @@ Each Kadras package included in the platform can be configured independently.
 | `service_binding` | `{}` | Configuration for the Service Binding package. |
 | `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |
 | `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
-| `weaviate` | `{}` | Configuration for the Weaviate package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
 </details>

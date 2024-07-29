@@ -25,7 +25,7 @@ spec:
   packageRef:
     refName: dapr.packages.kadras.io
     versionSelection:
-      constraints: 1.13.4
+      constraints: 1.13.5
   values:
     - secretRef:
         name: dapr-values
