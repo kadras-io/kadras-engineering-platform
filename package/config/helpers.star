@@ -27,9 +27,9 @@ def get_issuer_name(issuer):
   if issuer.type == "private":
     return "kadras-ca-issuer"
   elif issuer.type == "letsencrypt_staging":
-    return "letsencrypt-staging-http01-issuer"
+    return "letsencrypt-staging-issuer"
   elif issuer.type == "letsencrypt":
-    return "letsencrypt-prod-http01-issuer"
+    return "letsencrypt-prod-issuer"
   elif issuer.type == "custom":
     return issuer.name
   end
