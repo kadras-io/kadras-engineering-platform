@@ -100,6 +100,7 @@ The Engineering Platform package has the following configurable properties.
 |-------|-------------------|-------------|
 | `platform.profile` | `run` | The platform profile to install. Options: `standalone`, `build`, `run`. |
 | `platform.namespace` | `kadras-system` | The namespace where to install the platform. |
+| `platform.additional_packages` | `[]` | A list of packages to include in the installation. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
 | `platform.ca_cert_data` | `""` | PEM-encoded certificate data to trust TLS connections with a custom CA. |
 | `platform.ingress.domain` | `""` | The base domain name the platform will use to configure the Ingress controller. It must be a valid DNS name. |
@@ -132,11 +133,12 @@ Each Kadras package included in the platform can be configured independently.
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `kyverno.core` | `{}` | Configuration for the Kyverno package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
+| `postgresql_operator` | `{}` | Configuration for the PostgreSQL Operator package. |
 | `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
 | `service_binding` | `{}` | Configuration for the Service Binding package. |
-| `tekton.catalog` | `{}` | Configuration for the Tekton Catalog package. |
 | `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
+| `tempo_operator` | `{}` | Configuration for the Tempo Operator package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
 </details>
