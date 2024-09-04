@@ -3,10 +3,10 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_additional("dapr"):
+#@ if is_package_additional("tempo-operator"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.dapr)
+#@   values = struct.decode(data.values.tempo_operator)
 #@   return struct.encode(values)
 #@ end
 
@@ -14,26 +14,26 @@
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: dapr
+  name: tempo-operator
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: dapr
-    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-group: tempo-operator
+    kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: dapr.packages.kadras.io
+    refName: tempo-operator.packages.kadras.io
     versionSelection:
-      constraints: 1.14.1
+      constraints: 0.13.0
   values:
     - secretRef:
-        name: dapr-values
+        name: tempo-operator-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: dapr-values
+  name: tempo-operator-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())

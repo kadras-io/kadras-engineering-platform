@@ -146,6 +146,10 @@ tekton:
   #@schema/type any=True
   pipelines: {}
 
+#@schema/desc "Configuration for the Tempo Operator package."
+#@schema/type any=True
+tempo_operator: {}
+
 #@schema/desc "Configuration for the Workspace Provisioner package."
 #@schema/type any=True
 workspace_provisioner: {}
