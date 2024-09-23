@@ -26,7 +26,7 @@ spec:
   packageRef:
     refName: developer-portal.packages.kadras.io
     versionSelection:
-      constraints: 0.2.0
+      constraints: 0.2.1
   values:
     - secretRef:
         name: developer-portal-values

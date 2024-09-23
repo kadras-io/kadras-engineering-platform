@@ -127,6 +127,7 @@ Each Kadras package included in the platform can be configured independently.
 | `contour` | `{}` | Configuration for the Contour package. |
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
 | `dapr` | `{}` | Configuration for the Dapr package. |
+| `dependency-track` | `{}` | Configuration for the Dependency Track package. |
 | `developer_portal` | `{}` | Configuration for the Developer Portal package. |
 | `flux` | `{}` | Configuration for the Flux package. |
 | `gitops_configurer` | `{}` | Configuration for the GitOps Configurer package. |

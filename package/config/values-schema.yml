@@ -96,6 +96,10 @@ crossplane: {}
 #@schema/type any=True
 dapr: {}
 
+#@schema/desc "Configuration for the Dependency Track package."
+#@schema/type any=True
+dependency_track: {}
+
 #@schema/desc "Configuration for the Developer Portal package."
 #@schema/type any=True
 developer_portal: {}

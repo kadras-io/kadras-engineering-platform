@@ -3,10 +3,10 @@
 #@ load("@ytt:yaml", "yaml")
 #@ load("/helpers.star", "is_package_additional")
 
-#@ if is_package_additional("rabbitmq-operator"):
+#@ if is_package_additional("dependency-track"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.rabbitmq_operator)
+#@   values = struct.decode(data.values.dependency_track)
 #@   return struct.encode(values)
 #@ end
 
@@ -14,25 +14,29 @@
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: rabbitmq-operator
+  name: dependency-track
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: rabbitmq-operator
+    kapp.k14s.io/change-group: dependency-track
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.contour: upsert after upserting contour
+    kapp.k14s.io/change-rule.postgresql-operator: upsert after upserting postgresql-operator
+    kapp.k14s.io/change-rule.secretgen-controller: upsert after upserting secretgen-controller
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: rabbitmq-operator.packages.kadras.io
+    refName: dependency-track.packages.kadras.io
     versionSelection:
-      constraints: 2.10.0
+      constraints: 4.11.7
   values:
     - secretRef:
-        name: rabbitmq-operator-values
+        name: dependency-track-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: rabbitmq-operator-values
+  name: dependency-track-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())
