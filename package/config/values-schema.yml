@@ -71,15 +71,6 @@ platform:
       #@schema/desc "The namespace of the Secret holding the credentials to access the Git server."
       namespace: kadras-system
 
-#@schema/desc "Configuration for Buildpacks related packages."
-buildpacks:
-  #@schema/desc "Configuration for the Buildpacks Catalog package."
-  #@schema/type any=True
-  catalog: {}
-  #@schema/desc "Configuration for the Kpack package."
-  #@schema/type any=True
-  kpack: {}
-
 #@schema/desc "Configuration for the Cert Manager package."
 #@schema/type any=True
 cert_manager: {}
@@ -143,12 +134,6 @@ secretgen_controller: {}
 #@schema/desc "Configuration for the Service Binding package."
 #@schema/type any=True
 service_binding: {}
-
-#@schema/desc "Configuration for Tekton related packages."
-tekton:
-  #@schema/desc "Configuration for the Tekton Pipelines package."
-  #@schema/type any=True
-  pipelines: {}
 
 #@schema/desc "Configuration for the Tempo Operator package."
 #@schema/type any=True

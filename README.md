@@ -121,8 +121,6 @@ Each Kadras package included in the platform can be configured independently.
 
 | Config | Default | Description |
 |-------|-------------------|-------------|
-| `buildpacks.catalog` | `{}` | Configuration for the Buildpacks Catalog package. |
-| `buildpacks.kpack` | `{}` | Configuration for the Kpack package. |
 | `cert_manager` | `{}` | Configuration for the Cert Manager package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
@@ -138,7 +136,6 @@ Each Kadras package included in the platform can be configured independently.
 | `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
 | `service_binding` | `{}` | Configuration for the Service Binding package. |
-| `tekton.pipelines` | `{}` | Configuration for the Tekton Pipelines package. |
 | `tempo_operator` | `{}` | Configuration for the Tempo Operator package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
