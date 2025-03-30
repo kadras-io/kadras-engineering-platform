@@ -33,7 +33,7 @@ spec:
   packageRef:
     refName: contour.packages.kadras.io
     versionSelection:
-      constraints: 1.30.1
+      constraints: 1.30.3
   values:
     - secretRef:
         name: contour-values

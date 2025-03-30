@@ -26,7 +26,7 @@ spec:
   packageRef:
     refName: tempo-operator.packages.kadras.io
     versionSelection:
-      constraints: 0.14.1
+      constraints: 0.15.3
   values:
     - secretRef:
         name: tempo-operator-values
