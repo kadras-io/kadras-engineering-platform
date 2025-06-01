@@ -7,6 +7,17 @@
 
 #@ def compute_package_values():
 #@   values = struct.decode(data.values.dependency_track)
+#@
+#@   #! Compute values for Ingress Domain Name
+#@   if data.values.platform.ingress.domain and (not hasattr(data.values.dependency_track, "domain_name") or not data.values.dependency_track.domain_name):
+#@     values["domain_name"] = "dependency-track." + data.values.platform.ingress.domain
+#@   end
+#@
+#@   #! Compute values for Ingress Issuer
+#@   if data.values.platform.ingress.issuer and (not hasattr(data.values.dependency_track, "ingress_issuer") or not data.values.dependency_track.ingress_issuer):
+#@     values["ingress_issuer"] = get_issuer_name(data.values.platform.ingress.issuer)
+#@   end
+#@
 #@   return struct.encode(values)
 #@ end
 
