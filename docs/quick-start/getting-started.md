@@ -50,7 +50,7 @@ Add the Kadras repository to make the platform packages available to the cluster
 
   ```shell
   kctrl package repository add -r kadras-packages \
-    --url ghcr.io/kadras-io/kadras-packages:0.25.0 \
+    --url ghcr.io/kadras-io/kadras-packages:0.26.0 \
     -n kadras-system --create-namespace
   ```
 
@@ -78,7 +78,7 @@ Reference the `values.yml` file you created in the previous step and install the
   ```shell
   kctrl package install -i engineering-platform \
     -p engineering-platform.packages.kadras.io \
-    -v 0.23.0 \
+    -v 0.26.0 \
     -n kadras-system \
     --values-file values.yml
   ```
