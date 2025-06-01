@@ -24,7 +24,7 @@ spec:
   packageRef:
     refName: rabbitmq-operator.packages.kadras.io
     versionSelection:
-      constraints: 2.12.1
+      constraints: 2.13.0
   values:
     - secretRef:
         name: rabbitmq-operator-values
