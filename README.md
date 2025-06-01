@@ -12,7 +12,7 @@ A cloud native platform aimed at supporting application developers with paved pa
 
 ### Prerequisites
 
-* Kubernetes 1.30+
+* Kubernetes 1.31+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
