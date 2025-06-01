@@ -1,7 +1,7 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_additional")
+#@ load("/helpers.star", "get_issuer_name", "is_package_additional")
 
 #@ if is_package_additional("dependency-track"):
 
