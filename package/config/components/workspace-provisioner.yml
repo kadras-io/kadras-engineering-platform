@@ -9,12 +9,12 @@
 #@   values = struct.decode(data.values.workspace_provisioner)
 #@
 #@   #! Compute values for OCI Registry server
-#@   if data.values.platform.oci_registry.secret.name and data.values.platform.oci_registry.secret.namespace:
-#@     if not hasattr(data.values.workspace_provisioner, "oci_registry") or not hasattr(data.values.workspace_provisioner.oci_registry, "secret") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "name") or not hasattr(data.values.workspace_provisioner.oci_registry.secret, "namespace") or not data.values.workspace_provisioner.oci_registry.secret.name or not data.values.workspace_provisioner.oci_registry.secret.namespace:
-#@       values["oci_registry"] = {}
-#@       values["oci_registry"]["secret"] = {}
-#@       values["oci_registry"]["secret"]["name"] = data.values.platform.oci_registry.secret.name
-#@       values["oci_registry"]["secret"]["namespace"] = data.values.platform.oci_registry.secret.namespace
+#@   if data.values.platform.oci.pull_secret.name and data.values.platform.oci.pull_secret.namespace:
+#@     if not hasattr(data.values.workspace_provisioner, "oci") or not hasattr(data.values.workspace_provisioner.oci, "pull_secret") or not hasattr(data.values.workspace_provisioner.oci.pull_secret, "name") or not hasattr(data.values.workspace_provisioner.oci.pull_secret, "namespace") or not data.values.workspace_provisioner.oci.pull_secret.name or not data.values.workspace_provisioner.oci.pull_secret.namespace:
+#@       values["oci"] = {}
+#@       values["oci"]["pull_secret"] = {}
+#@       values["oci"]["pull_secret"]["name"] = data.values.platform.oci.pull_secret.name
+#@       values["oci"]["pull_secret"]["namespace"] = data.values.platform.oci.pull_secret.namespace
 #@     end
 #@   end
 #@
@@ -62,7 +62,7 @@ spec:
   packageRef:
     refName: workspace-provisioner.packages.kadras.io
     versionSelection:
-      constraints: 0.3.0
+      constraints: 0.4.0
   values:
     - secretRef:
         name: workspace-provisioner-values

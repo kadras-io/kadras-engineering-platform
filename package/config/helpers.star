@@ -3,7 +3,6 @@ load("@ytt:struct", "struct")
 
 profiles = struct.make(
   standalone="standalone",
-  build="build",
   run="run"
 )
 

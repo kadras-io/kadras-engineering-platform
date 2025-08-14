@@ -4,8 +4,8 @@
 
 #@schema/desc "Configuration for the platform packages."
 platform:
-  #@schema/desc "The platform profile to install. Options: `standalone`, `build`, `run`."
-  #@schema/validation one_of=["standalone", "build", "run"]
+  #@schema/desc "The platform profile to install. Options: `standalone`, `run`."
+  #@schema/validation one_of=["standalone", "run"]
   profile: run
   #@schema/desc "The namespace where to install the platform."
   namespace: kadras-system
@@ -35,19 +35,13 @@ platform:
       #@schema/validation when=lambda _, ctx: ctx.parent["type"] == "letsencrypt_staging" or ctx.parent["type"] == "letsencrypt"
       email: ""
 
-  #@schema/desc "Settings for the OCI registry that the platform will use."
-  oci_registry:
-    #@schema/desc "The server of the OCI Registry where the platform will publish OCI images."
-    #@schema/examples ("GitHub Container Registry", "ghcr.io")
-    server: ""
-    #@schema/desc "The repository in the OCI Registry where the platform will publish OCI images."
-    #@schema/examples ("Repository on GitHub Container Registry", "my-org")
-    repository: ""
-    #@schema/desc "Configuration for the Secret holding the credentials to access the OCI registry."
-    secret:
-      #@schema/desc "The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `standalone`, `dev`, `build`."
+  #@schema/desc "Settings for accessing the OCI registry that the platform will use."
+  oci:
+    #@schema/desc "Configuration for the Secret holding the credentials to pull images from the OCI registry."
+    pull_secret:
+      #@schema/desc "The name of the Secret holding the credentials to pull images from the OCI registry."
       name: ""
-      #@schema/desc "The namespace of the Secret holding the credentials to access the OCI registry."
+      #@schema/desc "The namespace of the Secret holding the credentials to pull images from the OCI registry."
       namespace: kadras-system
 
   #@schema/desc "Settings for Cosign, used for signing and verifying OCI artifacts."
@@ -82,10 +76,6 @@ contour: {}
 #@schema/desc "Configuration for the Crossplane package."
 #@schema/type any=True
 crossplane: {}
-
-#@schema/desc "Configuration for the Dapr package."
-#@schema/type any=True
-dapr: {}
 
 #@schema/desc "Configuration for the Dependency Track package."
 #@schema/type any=True
