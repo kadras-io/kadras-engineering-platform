@@ -5,10 +5,8 @@ platform:
   ingress:
     domain: kadras.io
 
-  oci_registry:
-    server: "ghcr.io"
-    repository: "my-org"
-    secret:
+  oci:
+    pull_secret:
       name: supply-chain-registry-credentials
       namespace: kadras-system
 
