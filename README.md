@@ -107,8 +107,8 @@ The Engineering Platform package has the following configurable properties.
 | `platform.ingress.issuer.type` | `private` | The type of ClusterIssuer the platform will use to enable TLS communications. Options: `private`, `letsencrypt_staging`, `letsencrypt`, `custom`. |
 | `platform.ingress.issuer.name` | `""` | A reference to a custom ClusterIssuer previously created on the cluster where the platform will be installed. Required when the type is `custom`. |
 | `platform.ingress.issuer.email` | `""` | The email address that Let's Encrypt will use to send info on expiring certificates or other issues. Required when the type is `letsencrypt_staging` or `letsencrypt`. |
-| `platform.oci_registry.secret.name` | `""` | The name of the Secret holding the credentials to access the OCI registry. The credentials should provide read-only access to the OCI registry except when installing the platform with one of these profiles: `standalone`, `dev`, `build`. |
-| `platform.oci_registry.secret.namespace` | `kadras-system` | The namespace of the Secret holding the credentials to access the OCI registry. |
+| `platform.oci.pull_secret.name` | `""` | The name of the Secret holding the credentials to pull images from the OCI registry. |
+| `platform.oci.pull_secret.namespace` | `kadras-system` | The namespace of the Secret holding the credentials to pull images from the OCI registry. |
 | `platform.cosign.secret.name` | `""` | The name of the Secret holding the Cosign key pair. |
 | `platform.cosign.secret.namespace` | `kadras-system` | The namespace of the Secret holding the Cosign key pair. |
 | `platform.git.server` | `https://github.com` | The server hosting the Git repositories used by the plaform. |
