@@ -1,0 +1,25 @@
+#@ load("@ytt:data", "data")
+
+#@ def kind_version_map():
+#@   return {
+#@     "1.33": "kindest/node:v1.33.7",
+#@     "1.34": "kindest/node:v1.34.3",
+#@     "1.35": "kindest/node:v1.35.1"
+#@   }
+#@ end
+
+---
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  image: #@ kind_version_map()[data.values.k8s_version]
+- role: worker
+  image: #@ kind_version_map()[data.values.k8s_version]
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    listenAddress: "0.0.0.0"  
+  - containerPort: 443
+    hostPort: 443
+    listenAddress: "0.0.0.0"

@@ -1,0 +1,42 @@
+version = 1
+
+[install]
+kapp.pkg-path = "kapp"
+ytt.pkg-path = "ytt"
+kbld.pkg-path = "kbld"
+imgpkg.pkg-path = "imgpkg"
+vendir.pkg-path = "vendir"
+kubectl.pkg-path = "kubectl"
+kyverno-chainsaw.pkg-path = "kyverno-chainsaw"
+go-task.pkg-path = "go-task"
+kubeconform.pkg-path = "kubeconform"
+kubernetes-helm.pkg-path = "kubernetes-helm"
+jq.pkg-path = "jq"
+yq.pkg-path = "yq"
+yamllint.pkg-path = "yamllint"
+k3d.pkg-path = "k3d"
+go.pkg-path = "go"
+kind.pkg-path = "kind"
+kuttl.pkg-path = "kuttl"
+cosign.pkg-path = "cosign"
+podman.pkg-path = "podman"
+
+[vars]
+
+[hook]
+
+[profile]
+
+[services]
+
+[include]
+
+[build]
+
+[options]
+systems = [
+  "aarch64-darwin",
+  "aarch64-linux",
+  "x86_64-darwin",
+  "x86_64-linux",
+]

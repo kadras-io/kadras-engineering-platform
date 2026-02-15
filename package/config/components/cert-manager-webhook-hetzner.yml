@@ -1,39 +1,39 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
 #@ load("@ytt:yaml", "yaml")
-#@ load("/helpers.star", "is_package_additional")
+#@ load("/helpers.star", "is_any_profile_enabled", "is_package_enabled", "profiles")
 
-#@ if is_package_additional("service-binding"):
+#@ if is_package_enabled("cert-manager-webhook-hetzner"):
 
 #@ def compute_package_values():
-#@   values = struct.decode(data.values.service_binding)
-#@   return struct.encode(values)
+#@   return data.values.cert_manager_webhook_hetzner
 #@ end
 
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
 kind: PackageInstall
 metadata:
-  name: service-binding
+  name: cert-manager-webhook-hetzner
   namespace: #@ data.values.platform.namespace
   annotations:
-    kapp.k14s.io/change-group: service-binding
+    kapp.k14s.io/change-group: cert-manager-webhook-hetzner
     kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
-    refName: service-binding.packages.kadras.io
+    refName: cert-manager-webhook-hetzner.packages.kadras.io
     versionSelection:
-      constraints: 1.0.0
+      constraints: 0.6.5
+      prereleases: {}
   values:
     - secretRef:
-        name: service-binding-values
+        name: cert-manager-webhook-hetzner-values
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: service-binding-values
+  name: cert-manager-webhook-hetzner-values
   namespace: #@ data.values.platform.namespace
 stringData:
   values.yaml: #@ yaml.encode(compute_package_values())

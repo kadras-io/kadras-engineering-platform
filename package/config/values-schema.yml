@@ -69,6 +69,10 @@ platform:
 #@schema/type any=True
 cert_manager: {}
 
+#@schema/desc "Configuration for the Cert Manager Webhook Hetzner package."
+#@schema/type any=True
+cert_manager_webhook_hetzner: {}
+
 #@schema/desc "Configuration for the Contour package."
 #@schema/type any=True
 contour: {}
@@ -120,10 +124,6 @@ rabbitmq_operator: {}
 #@schema/desc "Configuration for the Secretgen Controller package."
 #@schema/type any=True
 secretgen_controller: {}
-
-#@schema/desc "Configuration for the Service Binding package."
-#@schema/type any=True
-service_binding: {}
 
 #@schema/desc "Configuration for the Tempo Operator package."
 #@schema/type any=True

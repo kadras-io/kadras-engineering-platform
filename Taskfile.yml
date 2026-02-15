@@ -1,0 +1,87 @@
+# https://taskfile.dev
+
+version: '3'
+
+env:
+  CLUSTER_NAME: kadras-dev
+  K8S_VERSION: v1.35
+
+tasks:
+  
+  # =============================================
+  # Cluster Management
+  # =============================================
+
+  cluster:setup:
+    desc: Create kind cluster
+    cmds:
+      - kind delete cluster --name {{.CLUSTER_NAME}}
+      - ytt -f test/setup/clusters/kind-template.yml --data-value k8s_version="{{.K8S_VERSION | replace "v" ""}}" | kind create cluster --name {{.CLUSTER_NAME}} --config -
+      - kubectl wait --for=condition=Ready nodes --all --timeout=5m
+      - kapp deploy -a setup -f test/setup/assets -y
+      - kubectl config set-context --current --namespace=tests
+      - echo "✅ Cluster '{{.CLUSTER_NAME}}' is ready for use!"
+
+  cluster:cleanup:
+    desc: Delete kind cluster
+    cmds:
+      - kind delete cluster --name {{.CLUSTER_NAME}}
+
+  cluster:info:
+    desc: Display cluster information
+    cmds:
+      - kubectl cluster-info
+      - kubectl get nodes
+
+  # =============================================
+  # Development
+  # =============================================
+
+  dev:
+    desc: Inner development loop with kctrl
+    cmds:
+      - cd package && kctrl dev -f package-resources.yml --local -y
+
+  clean:
+    desc: Clean development environment
+    cmds:
+      - cd package && kctrl dev -f package-resources.yml --local -y --delete
+
+  # =============================================
+  # Package Operations
+  # =============================================
+
+  build:
+    desc: Build package configuration
+    cmds:
+      - cd package && kctrl package init
+  
+  kbld:
+    desc: Use kbld to resolve the OCI images referenced within the manifests
+    cmds:
+      - rm -f package/.imgpkg/images.yml && mkdir -p package/.imgpkg && ytt --file package/config | kbld -f- --imgpkg-lock-output package/.imgpkg/images.yml 1>> /dev/null
+
+  schema:
+    desc: Use ytt to generate an OpenAPI specification for the package's configuration values
+    cmds:
+      - ytt -f package/config/values-schema.yml --data-values-schema-inspect -o openapi-v3 > schema-openapi.yml
+
+  # =============================================
+  # Testing
+  # =============================================
+
+  test:
+    desc: Run all tests
+    cmds:
+      - task: test:config
+      - task: test:integration
+
+  test:config:
+    desc: Check the ytt-annotated Kubernetes configuration and its validation
+    cmds:
+      - ytt -f package/config | kubeconform -ignore-missing-schemas -summary
+
+  test:integration:
+    desc: Run package integration tests
+    cmds:
+      - kubectl kuttl test --config test/integration/kuttl-test.yml --kind-config <(ytt -f test/setup/clusters/kind-template.yml --data-value k8s_version="{{.K8S_VERSION | replace "v" ""}}")

@@ -23,7 +23,7 @@ spec:
   packageRef:
     refName: metrics-server.packages.kadras.io
     versionSelection:
-      constraints: 0.8.0
+      constraints: 0.8.1
       prereleases: {}
   values:
   - secretRef:

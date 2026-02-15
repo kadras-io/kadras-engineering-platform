@@ -12,7 +12,7 @@ A cloud native platform aimed at supporting application developers with paved pa
 
 ### Prerequisites
 
-* Kubernetes 1.32+
+* Kubernetes 1.33+
 * Carvel [`kctrl`](https://carvel.dev/kapp-controller/docs/latest/install/#installing-kapp-controller-cli-kctrl) CLI.
 * Carvel [kapp-controller](https://carvel.dev/kapp-controller) deployed in your Kubernetes cluster. You can install it with Carvel [`kapp`](https://carvel.dev/kapp/docs/latest/install) (recommended choice) or `kubectl`.
 
@@ -98,7 +98,7 @@ The Engineering Platform package has the following configurable properties.
 
 | Config | Default | Description |
 |-------|-------------------|-------------|
-| `platform.profile` | `run` | The platform profile to install. Options: `standalone`, `build`, `run`. |
+| `platform.profile` | `run` | The platform profile to install. Options: `standalone`, `run`. |
 | `platform.namespace` | `kadras-system` | The namespace where to install the platform. |
 | `platform.additional_packages` | `[]` | A list of packages to include in the installation. |
 | `platform.excluded_packages` | `[]` | A list of packages to exclude from being installed. |
@@ -120,9 +120,10 @@ Each Kadras package included in the platform can be configured independently.
 | Config | Default | Description |
 |-------|-------------------|-------------|
 | `cert_manager` | `{}` | Configuration for the Cert Manager package. |
+| `cert_manager_webhook_hetzner` | `{}` | Configuration for the Cert Manager Webhook Hetzner package. |
 | `contour` | `{}` | Configuration for the Contour package. |
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
-| `dependency-track` | `{}` | Configuration for the Dependency Track package. |
+| `dependency_track` | `{}` | Configuration for the Dependency Track package. |
 | `developer_portal` | `{}` | Configuration for the Developer Portal package. |
 | `flux` | `{}` | Configuration for the Flux package. |
 | `gitops_configurer` | `{}` | Configuration for the GitOps Configurer package. |
@@ -132,7 +133,6 @@ Each Kadras package included in the platform can be configured independently.
 | `postgresql_operator` | `{}` | Configuration for the PostgreSQL Operator package. |
 | `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
-| `service_binding` | `{}` | Configuration for the Service Binding package. |
 | `tempo_operator` | `{}` | Configuration for the Tempo Operator package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 

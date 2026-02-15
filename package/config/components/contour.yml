@@ -27,13 +27,14 @@ metadata:
   annotations:
     kapp.k14s.io/change-group: contour
     kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.cert-manager-webhook-hetzner: upsert after upserting cert-manager-webhook-hetzner
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
     refName: contour.packages.kadras.io
     versionSelection:
-      constraints: 1.33.0
+      constraints: 1.33.1
   values:
     - secretRef:
         name: contour-values

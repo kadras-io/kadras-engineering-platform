@@ -17,7 +17,13 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: gitops-configurer
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.contour: upsert after upserting contour
+    kapp.k14s.io/change-rule.crossplane: upsert after upserting crossplane
     kapp.k14s.io/change-rule.flux: upsert after upserting flux
+    kapp.k14s.io/change-rule.knative-serving: upsert after upserting knative-serving
+    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
+    kapp.k14s.io/change-rule.postgresql-operator: upsert after upserting postgresql-operator
     kapp.k14s.io/change-rule.service-account: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
