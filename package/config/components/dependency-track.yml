@@ -39,7 +39,7 @@ spec:
   packageRef:
     refName: dependency-track.packages.kadras.io
     versionSelection:
-      constraints: 4.13.6
+      constraints: 4.13.6+kadras.1
   values:
     - secretRef:
         name: dependency-track-values

@@ -40,13 +40,14 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: cert-manager
+    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
     refName: cert-manager.packages.kadras.io
     versionSelection:
-      constraints: 1.19.3
+      constraints: 1.19.3+kadras.2
       prereleases: {}
   values:
     - secretRef:

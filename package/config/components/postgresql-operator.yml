@@ -24,7 +24,7 @@ spec:
   packageRef:
     refName: postgresql-operator.packages.kadras.io
     versionSelection:
-      constraints: 1.28.1
+      constraints: 1.28.1+kadras.1
   values:
     - secretRef:
         name: postgresql-operator-values

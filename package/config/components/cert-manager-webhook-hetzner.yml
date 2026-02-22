@@ -24,7 +24,7 @@ spec:
   packageRef:
     refName: cert-manager-webhook-hetzner.packages.kadras.io
     versionSelection:
-      constraints: 0.6.5
+      constraints: 0.6.5+kadras.2
       prereleases: {}
   values:
     - secretRef:

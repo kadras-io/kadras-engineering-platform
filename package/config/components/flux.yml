@@ -18,13 +18,14 @@ metadata:
   namespace: #@ data.values.platform.namespace
   annotations:
     kapp.k14s.io/change-group: flux
+    kapp.k14s.io/change-rule.kyverno: upsert after upserting kyverno
     kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
 spec:
   serviceAccountName: kadras-install-sa
   packageRef:
     refName: flux.packages.kadras.io
     versionSelection:
-      constraints: 2.7.5
+      constraints: 2.7.5+kadras.1
   values:
     - secretRef:
         name: flux-values
