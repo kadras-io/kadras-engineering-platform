@@ -1,4 +1,4 @@
-version = 1
+schema-version = "1.10.0"
 
 [install]
 kapp.pkg-path = "kapp"
@@ -7,13 +7,17 @@ kbld.pkg-path = "kbld"
 imgpkg.pkg-path = "imgpkg"
 vendir.pkg-path = "vendir"
 kubectl.pkg-path = "kubectl"
+kubectl.outputs = "all"
 kyverno-chainsaw.pkg-path = "kyverno-chainsaw"
 go-task.pkg-path = "go-task"
 kubeconform.pkg-path = "kubeconform"
 kubernetes-helm.pkg-path = "kubernetes-helm"
 jq.pkg-path = "jq"
+jq.outputs = "all"
 yq.pkg-path = "yq"
+yq.outputs = "all"
 yamllint.pkg-path = "yamllint"
+yamllint.outputs = "all"
 k3d.pkg-path = "k3d"
 go.pkg-path = "go"
 kind.pkg-path = "kind"
@@ -34,9 +38,4 @@ podman.pkg-path = "podman"
 [build]
 
 [options]
-systems = [
-  "aarch64-darwin",
-  "aarch64-linux",
-  "x86_64-darwin",
-  "x86_64-linux",
-]
+systems = ["aarch64-darwin", "aarch64-linux", "x86_64-darwin", "x86_64-linux"]
