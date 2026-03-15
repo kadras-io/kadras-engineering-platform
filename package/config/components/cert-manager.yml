@@ -47,7 +47,7 @@ spec:
   packageRef:
     refName: cert-manager.packages.kadras.io
     versionSelection:
-      constraints: 1.19.3+kadras.2
+      constraints: 1.20.0
       prereleases: {}
   values:
     - secretRef:
