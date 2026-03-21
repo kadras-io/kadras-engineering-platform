@@ -74,8 +74,6 @@ The Engineering Platform package can be customized via a `values.yml` file.
 
   ```yaml
   platform:
-    platform:
-      profile: run
     ingress:
       domain: platform.kadras.io
   ```
@@ -125,11 +123,13 @@ Each Kadras package included in the platform can be configured independently.
 | `crossplane` | `{}` | Configuration for the Crossplane package. |
 | `dependency_track` | `{}` | Configuration for the Dependency Track package. |
 | `developer_portal` | `{}` | Configuration for the Developer Portal package. |
+| `flagger` | `{}` | Configuration for the Flagger package. |
 | `flux` | `{}` | Configuration for the Flux package. |
 | `gitops_configurer` | `{}` | Configuration for the GitOps Configurer package. |
 | `knative.serving` | `{}` | Configuration for the Knative Serving package. |
 | `kyverno.core` | `{}` | Configuration for the Kyverno package. |
 | `metrics_server` | `{}` | Configuration for the Metrics Server package. |
+| `opentelemetry_operator` | `{}` | Configuration for the OpenTelemetry Operator package. |
 | `postgresql_operator` | `{}` | Configuration for the PostgreSQL Operator package. |
 | `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |

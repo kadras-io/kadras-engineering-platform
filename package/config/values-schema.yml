@@ -89,6 +89,10 @@ dependency_track: {}
 #@schema/type any=True
 developer_portal: {}
 
+#@schema/desc "Configuration for the Flagger package."
+#@schema/type any=True
+flagger: {}
+
 #@schema/desc "Configuration for the Flux package."
 #@schema/type any=True
 flux: {}
@@ -112,6 +116,10 @@ kyverno:
 #@schema/desc "Configuration for the Metrics Server package."
 #@schema/type any=True
 metrics_server: {}
+
+#@schema/desc "Configuration for the OpenTelemetry Operator package."
+#@schema/type any=True
+opentelemetry_operator: {}
 
 #@schema/desc "Configuration for the PostgreSQL Operator package."
 #@schema/type any=True
