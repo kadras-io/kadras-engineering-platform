@@ -133,7 +133,6 @@ Each Kadras package included in the platform can be configured independently.
 | `postgresql_operator` | `{}` | Configuration for the PostgreSQL Operator package. |
 | `rabbitmq_operator` | `{}` | Configuration for the RabbitMQ Operator package. |
 | `secretgen_controller` | `{}` | Configuration for the Secretgen Controller package. |
-| `tempo_operator` | `{}` | Configuration for the Tempo Operator package. |
 | `workspace_provisioner` | `{}` | Configuration for the Workspace Provisioner package. |
 
 </details>
