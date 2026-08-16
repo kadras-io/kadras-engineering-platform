@@ -30,7 +30,7 @@ spec:
   packageRef:
     refName: gitops-configurer.packages.kadras.io
     versionSelection:
-      constraints: 0.1.0
+      constraints: 0.2.0
       prereleases: {}
   values:
   - secretRef:

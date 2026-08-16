@@ -25,7 +25,7 @@ spec:
   packageRef:
     refName: opentelemetry-operator.packages.kadras.io
     versionSelection:
-      constraints: 0.147.0
+      constraints: 0.157.0
   values:
     - secretRef:
         name: opentelemetry-operator-values

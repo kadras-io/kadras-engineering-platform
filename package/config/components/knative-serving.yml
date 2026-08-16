@@ -43,7 +43,7 @@ spec:
   packageRef:
     refName: knative-serving.packages.kadras.io
     versionSelection:
-      constraints: 1.21.1
+      constraints: 1.23.0
   values:
     - secretRef:
         name: knative-serving-values
