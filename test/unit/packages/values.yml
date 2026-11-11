@@ -1,0 +1,4 @@
+#! Optional packages included, and a default one excluded.
+packages:
+  include: [kyverno, crossplane]
+  exclude: [flux]

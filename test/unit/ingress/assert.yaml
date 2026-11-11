@@ -1,0 +1,62 @@
+# Each workspace gets a wildcard hostname on the external Gateway, for its Knative Services.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: envoy-gateway-values
+stringData:
+  (parse_yaml("values.yaml")):
+    gateways:
+      external:
+        domain: example.com
+        tls:
+          issuer: letsencrypt-prod-issuer
+          hostnames:
+            - "*.team-a.example.com"
+            - "*.team-b.example.com"
+    # The run profile keeps the LoadBalancer Service of the package.
+    (envoy == null): true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+stringData:
+  (parse_yaml("values.yaml")):
+    ingress:
+      domain: example.com
+      https: true
+---
+# Dependency Track is served on a subdomain covered by the `*.<domain>` certificate.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dependency-track-values
+stringData:
+  (parse_yaml("values.yaml")):
+    ingress:
+      hostname: dependency-track.example.com
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: dependency-track
+  annotations:
+    kapp.k14s.io/change-rule.upsert-postgresql-operator: upsert after upserting postgresql-operator
+    kapp.k14s.io/change-rule.upsert-envoy-gateway: upsert after upserting envoy-gateway
+---
+# The workspaces are passed to Workspace Provisioner as they are.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: workspace-provisioner-values
+stringData:
+  (parse_yaml("values.yaml")):
+    namespaces:
+      - name: team-a
+        pod_security: ""
+        members:
+          - kind: Group
+            name: team-a-developers
+            role: edit
+      - name: team-b
+        pod_security: baseline

@@ -1,0 +1,49 @@
+# The applications are served on 127.0.0.1.sslip.io over HTTPS, via the node ports mapped by the local cluster.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: envoy-gateway-values
+stringData:
+  (parse_yaml("values.yaml")):
+    gateways:
+      external:
+        domain: 127.0.0.1.sslip.io
+        tls:
+          issuer: kadras-ca-issuer
+          hostnames:
+            - "*.apps.127.0.0.1.sslip.io"
+    envoy:
+      service:
+        type: NodePort
+        external_traffic_policy: Cluster
+        node_ports:
+          http: 30080
+          https: 30443
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+stringData:
+  (parse_yaml("values.yaml")):
+    ingress:
+      domain: 127.0.0.1.sslip.io
+      https: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: metrics-server-values
+stringData:
+  (parse_yaml("values.yaml")):
+    kubelet:
+      insecure_tls: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: workspace-provisioner-values
+stringData:
+  (parse_yaml("values.yaml")):
+    namespaces:
+      - name: apps

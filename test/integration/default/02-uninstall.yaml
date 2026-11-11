@@ -1,0 +1,12 @@
+---
+# The platform is deleted with kapp, as kapp-controller does when deleting the PackageInstall:
+# `kctrl dev --delete` doesn't delete the resources of a local installation.
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+delete:
+  - apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: hello
+    namespace: apps
+commands:
+  - script: kapp delete -a engineering-platform.app -n tests -y

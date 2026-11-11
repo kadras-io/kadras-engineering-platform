@@ -1,0 +1,25 @@
+#! The shared settings, applied to the packages supporting them.
+packages:
+  include: [kyverno, crossplane]
+ca_cert_data: |
+  -----BEGIN CERTIFICATE-----
+  MIIBszCCAVmgAwIBAgIUZm9vYmFyYmF6cXV4MAoGCCqGSM49BAMCMBUxEzARBgNV
+  -----END CERTIFICATE-----
+observability:
+  logging:
+    level: debug
+    format: text
+  metrics:
+    exporter: otlp
+    endpoint: http://otel-collector.observability.svc:4317
+  tracing:
+    enabled: true
+    endpoint: http://otel-collector.observability.svc:4317
+    sampling_rate: 0.5
+policies:
+  enabled: true
+security:
+  network_policies: true
+proxy:
+  https_proxy: http://proxy.example.com:3128
+  no_proxy: .cluster.local,.svc

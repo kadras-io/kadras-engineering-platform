@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flux-values
+stringData:
+  (parse_yaml("values.yaml")):
+    observability:
+      logging:
+        level: trace
+        format: json
+---
+# Maps are merged.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+stringData:
+  (parse_yaml("values.yaml")):
+    config:
+      features:
+        secure-pod-defaults: Enabled
+        multi-container-probing: enabled
+---
+# Lists are replaced.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: envoy-gateway-values
+stringData:
+  (parse_yaml("values.yaml")):
+    gateways:
+      external:
+        domain: 127.0.0.1.sslip.io
+        tls:
+          issuer: kadras-ca-issuer
+          hostnames:
+            - "*.custom.127.0.0.1.sslip.io"

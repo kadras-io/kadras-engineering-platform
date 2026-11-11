@@ -1,0 +1,4 @@
+# expected: a valid DNS label
+---
+workspaces:
+  - name: Team_A

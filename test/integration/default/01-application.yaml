@@ -1,0 +1,15 @@
+---
+# A Knative Service without a security context: Knative sets the secure defaults required by the workspace.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: hello
+  namespace: apps
+spec:
+  template:
+    spec:
+      containers:
+        - image: ghcr.io/knative/helloworld-go
+          env:
+            - name: TARGET
+              value: Kadras

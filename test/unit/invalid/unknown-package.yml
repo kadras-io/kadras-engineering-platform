@@ -1,0 +1,4 @@
+# expected: one of ["cert-manager"
+---
+packages:
+  include: [contour]

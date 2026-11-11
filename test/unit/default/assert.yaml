@@ -1,0 +1,109 @@
+# The default packages are installed, in the versions of the catalog, after the packages they depend on.
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: gateway-api
+  namespace: kadras-system
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: gateway-api.packages.kadras.io
+    versionSelection:
+      constraints: 1.6.1
+  (values == null): true
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager
+  annotations:
+    kapp.k14s.io/change-group: cert-manager
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+    kapp.k14s.io/change-rule.upsert-gateway-api: upsert after upserting gateway-api
+    kapp.k14s.io/change-rule.delete-gateway-api: delete before deleting gateway-api
+spec:
+  packageRef:
+    versionSelection:
+      constraints: 1.21.3+kadras.1
+  values:
+    - secretRef:
+        name: cert-manager-values
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: envoy-gateway
+  annotations:
+    kapp.k14s.io/change-rule.upsert-gateway-api: upsert after upserting gateway-api
+    kapp.k14s.io/change-rule.upsert-cert-manager: upsert after upserting cert-manager
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: knative-serving
+  annotations:
+    kapp.k14s.io/change-rule.upsert-envoy-gateway: upsert after upserting envoy-gateway
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: flux
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: secretgen-controller
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: workspace-provisioner
+  annotations:
+    kapp.k14s.io/change-rule.upsert-secretgen-controller: upsert after upserting secretgen-controller
+---
+# Without a domain, the applications aren't served over HTTPS.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+  namespace: kadras-system
+stringData:
+  (parse_yaml("values.yaml")):
+    config:
+      features:
+        secure-pod-defaults: Enabled
+    ingress:
+      domain: ""
+      https: false
+    observability:
+      logging:
+        level: info
+      metrics:
+        enabled: true
+        exporter: prometheus
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: envoy-gateway-values
+stringData:
+  (parse_yaml("values.yaml")):
+    (gateways == null): true
+    (envoy == null): true
+    tls:
+      internal:
+        provider: cert-manager
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: workspace-provisioner-values
+stringData:
+  (parse_yaml("values.yaml")):
+    namespaces: []
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kadras-install-sa
+  namespace: kadras-system

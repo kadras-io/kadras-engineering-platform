@@ -1,10 +1,10 @@
 ### Carvel ###
 carvel-artifacts/
 repo/
+package/.imgpkg
 schema-openapi.yml
 
 ### KUTTL ###
-test/e2e/
 test/integration/kubeconfig
 test/integration/kuttl-artifacts
 kubeconfig

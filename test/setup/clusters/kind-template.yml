@@ -16,10 +16,11 @@ nodes:
   image: #@ kind_version_map()[data.values.k8s_version]
 - role: worker
   image: #@ kind_version_map()[data.values.k8s_version]
+  #! The node ports of the external Gateway with the `local` profile.
   extraPortMappings:
-  - containerPort: 80
+  - containerPort: 30080
     hostPort: 80
-    listenAddress: "0.0.0.0"  
-  - containerPort: 443
+    listenAddress: "0.0.0.0"
+  - containerPort: 30443
     hostPort: 443
     listenAddress: "0.0.0.0"

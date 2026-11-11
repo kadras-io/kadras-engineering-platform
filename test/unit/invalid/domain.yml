@@ -1,0 +1,4 @@
+# expected: a valid DNS name, like `example.com`
+---
+ingress:
+  domain: https://example.com

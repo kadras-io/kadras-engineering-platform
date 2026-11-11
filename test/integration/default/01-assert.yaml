@@ -1,0 +1,11 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - script: kubectl wait --for=condition=Ready --timeout=120s -n apps ksvc/hello
+  # The application is served over HTTPS on the local domain, via the node ports mapped to the host.
+  - timeout: 60
+    script: curl -sk --fail-with-body https://hello.apps.127.0.0.1.sslip.io | grep -q 'Hello Kadras'
+  # HTTP requests are redirected to HTTPS.
+  - timeout: 60
+    script: test "$(curl -s -o /dev/null -w '%{http_code}' http://hello.apps.127.0.0.1.sslip.io)" = 301

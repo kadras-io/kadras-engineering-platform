@@ -1,0 +1,17 @@
+---
+# All the default packages are installed.
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - script: |
+      kubectl wait --for=condition=ReconcileSucceeded --timeout=60s -n kadras-system \
+        packageinstall/gateway-api packageinstall/cert-manager packageinstall/envoy-gateway packageinstall/knative-serving \
+        packageinstall/flux packageinstall/secretgen-controller packageinstall/workspace-provisioner
+---
+# The workspace enforces the restricted Pod Security Standard.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+  labels:
+    pod-security.kubernetes.io/enforce: restricted

@@ -1,0 +1,5 @@
+# expected: length >= 1
+---
+observability:
+  tracing:
+    enabled: true

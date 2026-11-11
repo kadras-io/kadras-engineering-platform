@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flux-values
+stringData:
+  (parse_yaml("values.yaml")):
+    (starts_with(ca_cert_data, '-----BEGIN CERTIFICATE-----')): true
+    observability:
+      logging:
+        level: debug
+        format: text
+      # Flux metrics are only exposed for scraping.
+      metrics:
+        enabled: true
+        (exporter == null): true
+    policies:
+      enabled: true
+    proxy:
+      https_proxy: http://proxy.example.com:3128
+      no_proxy: .cluster.local,.svc
+---
+# Knative Serving pushes metrics and traces via OTLP. Its log format isn't configurable.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: knative-serving-values
+stringData:
+  (parse_yaml("values.yaml")):
+    observability:
+      logging:
+        level: debug
+        (format == null): true
+      metrics:
+        exporter: otlp
+        endpoint: http://otel-collector.observability.svc:4317
+      tracing:
+        enabled: true
+        endpoint: http://otel-collector.observability.svc:4317
+        sampling_rate: 0.5
+---
+# Kyverno has no sampling rate for traces.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kyverno-values
+stringData:
+  (parse_yaml("values.yaml")):
+    observability:
+      tracing:
+        enabled: true
+        (sampling_rate == null): true
+    security:
+      network_policies: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secretgen-controller-values
+stringData:
+  (parse_yaml("values.yaml")):
+    security:
+      network_policies: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: crossplane-values
+stringData:
+  (parse_yaml("values.yaml")):
+    (starts_with(ca_cert_data, '-----BEGIN CERTIFICATE-----')): true

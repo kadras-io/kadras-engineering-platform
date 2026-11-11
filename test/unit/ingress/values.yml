@@ -1,0 +1,14 @@
+#! A custom domain, with Let's Encrypt and two workspaces.
+ingress:
+  domain: example.com
+  issuer: letsencrypt-prod-issuer
+workspaces:
+  - name: team-a
+    members:
+      - kind: Group
+        name: team-a-developers
+        role: edit
+  - name: team-b
+    pod_security: baseline
+packages:
+  include: [dependency-track, postgresql-operator]

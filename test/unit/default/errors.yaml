@@ -1,0 +1,24 @@
+# The optional packages aren't installed.
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: kyverno
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: metrics-server
+---
+# The Gateway API package has no values.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gateway-api-values
+---
+# Change rules only reference the installed packages.
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager
+  annotations:
+    (contains(keys(@), 'kapp.k14s.io/change-rule.upsert-kyverno')): true

@@ -1,0 +1,59 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("/lib/catalog.star", "installed_package_names", "packages")
+#@ load("/lib/values.star", "package_values")
+
+#! A PackageInstall for each installed package, with its values in a Secret. kapp installs the packages in the order
+#! given by `after` in the catalog, and uninstalls them in the reverse order. All of them are uninstalled before the
+#! ServiceAccount used to install them.
+#! See: https://carvel.dev/kapp/docs/latest/apply-ordering
+
+#@ installed = installed_package_names(data.values.packages.include, data.values.packages.exclude)
+
+#@ def change_annotations(package):
+#@   annotations = {
+#@     "kapp.k14s.io/change-group": package.name,
+#@     "kapp.k14s.io/change-rule.serviceaccount": "delete before deleting serviceaccount",
+#@   }
+#@   for name in package.after:
+#@     if name in installed:
+#@       annotations["kapp.k14s.io/change-rule.upsert-" + name] = "upsert after upserting " + name
+#@       annotations["kapp.k14s.io/change-rule.delete-" + name] = "delete before deleting " + name
+#@     end
+#@   end
+#@   return annotations
+#@ end
+
+#@ for package in packages:
+#@ if package.name in installed:
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: #@ package.name
+  namespace: #@ data.values.namespace
+  annotations: #@ change_annotations(package)
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: #@ package.name + ".packages.kadras.io"
+    versionSelection:
+      constraints: #@ package.version
+  #@ if package.key:
+  values:
+    - secretRef:
+        name: #@ package.name + "-values"
+  #@ end
+
+#@ if package.key:
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ package.name + "-values"
+  namespace: #@ data.values.namespace
+stringData:
+  values.yaml: #@ yaml.encode(package_values(package))
+#@ end
+#@ end
+#@ end

@@ -1,0 +1,4 @@
+# expected: `kyverno` to be installed when `policies.enabled` is true
+---
+policies:
+  enabled: true

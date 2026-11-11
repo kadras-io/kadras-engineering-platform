@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: engineering-platform-values
+  namespace: tests
+stringData:
+  values.yaml: |
+    profile: local
+    workspaces:
+      - name: apps

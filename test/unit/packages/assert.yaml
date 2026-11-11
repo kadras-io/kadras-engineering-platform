@@ -1,0 +1,22 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: kyverno
+spec:
+  packageRef:
+    versionSelection:
+      constraints: 1.19.2+kadras.1
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: crossplane
+---
+# The packages with Kyverno policies are installed after Kyverno, when it's installed.
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager
+  annotations:
+    kapp.k14s.io/change-rule.upsert-kyverno: upsert after upserting kyverno
+    kapp.k14s.io/change-rule.delete-kyverno: delete before deleting kyverno

@@ -20,7 +20,17 @@ tasks:
       - kubectl wait --for=condition=Ready nodes --all --timeout=5m
       - kapp deploy -a setup -f test/setup/assets -y
       - kubectl config set-context --current --namespace=tests
+      - task: cluster:dependencies
       - echo "✅ Cluster '{{.CLUSTER_NAME}}' is ready for use!"
+
+  # The same dependencies are installed by the integration tests (test/integration/kuttl-test.yml).
+  cluster:dependencies:
+    desc: Install kapp-controller and the Kadras package repository, from its main branch
+    cmds:
+      - kapp deploy -a kapp-controller -y -f https://github.com/carvel-dev/kapp-controller/releases/latest/download/release.yml
+      - cd test/setup/dependencies && vendir sync
+      - kubectl create namespace kadras-system --dry-run=client -o yaml | kubectl apply -f -
+      - kapp deploy -a kadras-packages -n kadras-system -f test/setup/dependencies/package-repo -y
 
   cluster:cleanup:
     desc: Delete kind cluster
@@ -37,15 +47,17 @@ tasks:
   # Development
   # =============================================
 
+  # The platform is installed with the values of the integration tests: the `local` profile and the `apps` workspace.
   dev:
-    desc: Inner development loop with kctrl
+    desc: Inner development loop with kctrl, on the cluster created by cluster:setup
     cmds:
-      - cd package && kctrl dev -f package-resources.yml --local -y
+      - cd package && ytt -f ../test/integration/default/config -f package-resources.yml | kctrl dev -f- --local -y
 
+  # `kctrl dev --delete` doesn't delete the resources of a local installation, so the app is deleted with kapp.
   clean:
-    desc: Clean development environment
+    desc: Uninstall the platform installed by dev
     cmds:
-      - cd package && kctrl dev -f package-resources.yml --local -y --delete
+      - kapp delete -a engineering-platform.app -n tests -y
 
   # =============================================
   # Package Operations
@@ -64,7 +76,28 @@ tasks:
   schema:
     desc: Use ytt to generate an OpenAPI specification for the package's configuration values
     cmds:
-      - ytt -f package/config/values-schema.yml --data-values-schema-inspect -o openapi-v3 > schema-openapi.yml
+      - ytt -f package/config --data-values-schema-inspect -o openapi-v3 > schema-openapi.yml
+
+  docs:values:
+    desc: Generate the table of configurable values in the README from the values schema
+    silent: true
+    cmds:
+      - |
+        set -eo pipefail
+        hack/values-table.sh README.md > README.md.tmp && mv README.md.tmp README.md
+        echo "✅ README values table updated"
+
+  docs:check:
+    desc: Check that the table of configurable values in the README is up to date with the values schema
+    silent: true
+    cmds:
+      - |
+        set -eo pipefail
+        if ! diff -u README.md <(hack/values-table.sh README.md); then
+          echo "❌ The README values table is outdated. Run 'task docs:values' to update it."
+          exit 1
+        fi
+        echo "✅ README values table up to date"
 
   # =============================================
   # Testing
@@ -78,8 +111,43 @@ tasks:
 
   test:config:
     desc: Check the ytt-annotated Kubernetes configuration and its validation
+    silent: true
     cmds:
-      - ytt -f package/config | kubeconform -ignore-missing-schemas -summary
+      # Each scenario renders the package with its values, validates the result against the Kubernetes schemas,
+      # and checks it against the Chainsaw assertions in assert.yaml (must match) and errors.yaml (must not match).
+      - |
+        set -eo pipefail
+        rendered=$(mktemp)
+        schemas=$(mktemp -d)
+        trap 'rm -rf "$rendered" "$schemas"' EXIT
+        # The custom resources (NamespacedImageValidatingPolicy...) are validated against the schemas from the CRDs catalog.
+        # The braces are escaped from the Task templating.
+        crds_catalog='https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{"{{"}}.Group}}/{{"{{"}}.ResourceKind}}_{{"{{"}}.ResourceAPIVersion}}.json'
+        for values in test/unit/*/values.yml; do
+          scenario=$(dirname "$values")
+          echo "🧪 Scenario: $(basename "$scenario")"
+          ytt -f package/config --data-values-file "$values" > "$rendered"
+          kubeconform -ignore-missing-schemas -summary -cache "$schemas" \
+            -schema-location default -schema-location "$crds_catalog" < "$rendered"
+          hack/assert-render.sh "$rendered" "$scenario"
+        done
+      # Each invalid values file must be rejected with the error in its "# expected:" comment.
+      - |
+        set -eo pipefail
+        for values in test/unit/invalid/*.yml; do
+          echo "🧪 Invalid: $(basename "$values" .yml)"
+          expected=$(sed -n 's/^# expected: //p' "$values")
+          if output=$(ytt -f package/config --data-values-file "$values" 2>&1); then
+            echo "❌ Expected validation to fail for $values"
+            exit 1
+          fi
+          if ! grep -qF -- "$expected" <<< "$output"; then
+            echo "❌ Expected error containing '$expected' for $values, got:"
+            echo "$output"
+            exit 1
+          fi
+        done
+      - task: docs:check
 
   test:integration:
     desc: Run package integration tests

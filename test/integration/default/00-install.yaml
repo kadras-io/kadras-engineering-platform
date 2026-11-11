@@ -1,0 +1,8 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  - script: |
+      cd ../../../package && \
+      kubectl config set-context --current --namespace=tests && \
+      ytt -f ../test/integration/default/config -f package-resources.yml | kctrl dev -f- --local -y

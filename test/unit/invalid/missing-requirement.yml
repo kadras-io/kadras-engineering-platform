@@ -1,0 +1,4 @@
+# expected: knative-serving requires envoy-gateway
+---
+packages:
+  exclude: [envoy-gateway]

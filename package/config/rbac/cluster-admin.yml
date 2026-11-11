@@ -31,13 +31,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kadras-install-sa
-    namespace: #@ data.values.platform.namespace
+    namespace: #@ data.values.namespace
 
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kadras-install-sa
-  namespace: #@ data.values.platform.namespace
+  namespace: #@ data.values.namespace
   annotations:
     kapp.k14s.io/change-group: serviceaccount

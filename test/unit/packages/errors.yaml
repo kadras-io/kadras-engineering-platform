@@ -1,0 +1,9 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: flux
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flux-values

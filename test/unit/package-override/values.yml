@@ -1,0 +1,18 @@
+#! The package configuration takes precedence over the computed values.
+profile: local
+workspaces:
+  - name: apps
+flux:
+  observability:
+    logging:
+      level: trace
+knative_serving:
+  config:
+    features:
+      multi-container-probing: enabled
+envoy_gateway:
+  gateways:
+    external:
+      tls:
+        hostnames:
+          - "*.custom.127.0.0.1.sslip.io"

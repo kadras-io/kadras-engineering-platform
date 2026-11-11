@@ -1,0 +1,6 @@
+#! A local cluster, with a workspace and Metrics Server.
+profile: local
+packages:
+  include: [metrics-server]
+workspaces:
+  - name: apps
