@@ -113,6 +113,8 @@ spec:
     spec:
       containers:
         - image: ghcr.io/knative/helloworld-go
+          securityContext:
+            runAsUser: 1001
           env:
             - name: TARGET
               value: Kadras
@@ -126,7 +128,7 @@ kubectl wait --for=condition=Ready ksvc/hello -n apps
 curl -k https://hello.apps.127.0.0.1.sslip.io
 ```
 
-The workspace enforces the `restricted` Pod Security Standard: Knative sets the secure defaults on the application containers, like running as non-root.
+The workspace enforces the `restricted` Pod Security Standard: Knative sets the secure defaults on the application containers, like dropping all capabilities and requiring a non-root user. Images that run as root by default, like this one, need a non-root user (`runAsUser`).
 
 Delete the application when you're done.
 

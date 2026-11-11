@@ -1,5 +1,6 @@
 ---
-# A Knative Service without a security context: Knative sets the secure defaults required by the workspace.
+# A Knative Service in a workspace enforcing the restricted Pod Security Standard: Knative sets the secure defaults,
+# like `runAsNonRoot`. The image doesn't declare a user, so it runs with a non-root one.
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -10,6 +11,8 @@ spec:
     spec:
       containers:
         - image: ghcr.io/knative/helloworld-go
+          securityContext:
+            runAsUser: 1001
           env:
             - name: TARGET
               value: Kadras
