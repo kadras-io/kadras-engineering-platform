@@ -36,10 +36,13 @@ EOF
 
 <details><summary>Using k3d</summary>
 
+Disable the Traefik ingress controller and the Gateway API CRDs bundled with k3s, since the platform installs Envoy Gateway and the Gateway API CRDs it requires.
+
 ```shell
 k3d cluster create kadras \
   --port "80:30080@server:0" --port "443:30443@server:0" \
-  --k3s-arg "--disable=traefik@server:0"
+  --k3s-arg "--disable=traefik@server:0" \
+  --k3s-arg "--disable=gateway-api-crd@server:0"
 ```
 </details>
 

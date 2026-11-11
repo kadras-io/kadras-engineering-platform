@@ -1,0 +1,8 @@
+# The packages using the Gateway API are installed anyway, without the ordering on the excluded package.
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: envoy-gateway
+  annotations:
+    (contains(keys(@), 'kapp.k14s.io/change-rule.upsert-gateway-api')): false
+    kapp.k14s.io/change-rule.upsert-cert-manager: upsert after upserting cert-manager

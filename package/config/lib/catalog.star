@@ -18,12 +18,12 @@ def _package(name, key, version, default=False, requires=[], after=[]):
 end
 
 packages = [
-  _package("cert-manager", "cert_manager", "1.21.3+kadras.1", default=True, requires=["gateway-api"], after=["kyverno"]),
+  _package("cert-manager", "cert_manager", "1.21.3+kadras.1", default=True, after=["gateway-api", "kyverno"]),
   _package("cert-manager-webhook-hetzner", "cert_manager_webhook_hetzner", "0.9.1", requires=["cert-manager"]),
   _package("crossplane", "crossplane", "2.4.3"),
   _package("dependency-track", "dependency_track", "5.2.1+kadras.1", requires=["postgresql-operator", "secretgen-controller"], after=["envoy-gateway"]),
   _package("developer-portal", "developer_portal", "0.8.0"),
-  _package("envoy-gateway", "envoy_gateway", "1.10.0+kadras.1", default=True, requires=["gateway-api", "cert-manager"]),
+  _package("envoy-gateway", "envoy_gateway", "1.10.0+kadras.2", default=True, requires=["cert-manager"], after=["gateway-api"]),
   _package("flagger", "flagger", "1.45.0", after=["envoy-gateway", "knative-serving", "kyverno"]),
   _package("flux", "flux", "2.10.0", default=True, after=["kyverno"]),
   _package("gateway-api", None, "1.6.1", default=True),

@@ -30,6 +30,21 @@ packages:
     - flux
 ```
 
+### Gateway API CRDs
+
+The `gateway-api` package installs the Gateway API CRDs in the version and channel required by Envoy Gateway. Some clusters come with their own Gateway API CRDs, managed by the provider or the distribution: the package can't replace them, and fails with an error from the `safe-upgrades` admission policy.
+
+* On k3s and k3d, disable the CRDs bundled with k3s when creating the cluster (`--disable=gateway-api-crd`), so that the platform installs and manages them. See [getting-started.md](getting-started.md).
+* On clusters where the provider manages the CRDs, like GKE, exclude the `gateway-api` package and use theirs. They must be v1.6 or later. With the `standard` channel, the features of Envoy Gateway relying on the experimental Gateway API resources aren't available.
+
+```yaml
+packages:
+  exclude:
+    - gateway-api
+```
+
+### Requirements
+
 A package can't be installed without the packages it requires, like `dependency-track`, which requires `postgresql-operator` and `secretgen-controller`: the values are rejected with the missing packages. The PackageInstalls are created in the `kadras-system` namespace (`namespace`), and kapp installs the packages in order, after the ones they depend on. When changing `namespace`, add the Kadras package repository to that namespace too, or to the global packaging namespace of kapp-controller.
 
 ## Workspaces

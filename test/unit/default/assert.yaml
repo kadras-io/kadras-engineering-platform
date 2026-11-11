@@ -90,6 +90,7 @@ stringData:
   (parse_yaml("values.yaml")):
     (gateways == null): true
     (envoy == null): true
+    # cert-manager issues and renews the internal certificates.
     tls:
       internal:
         provider: cert-manager
