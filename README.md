@@ -14,24 +14,24 @@ The platform installs and configures a curated set of packages from the Kadras [
 
 | Package | Default | Description |
 |---------|---------|-------------|
-| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | ✅ | Certificates, issued by a private CA or Let's Encrypt. |
-| [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner) | | DNS-01 challenges with Hetzner, for Let's Encrypt wildcard certificates. |
-| [crossplane](https://github.com/kadras-io/package-for-crossplane) | | Infrastructure provisioning via Kubernetes APIs. |
-| [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | | Software supply chain security, via SBOM analysis. |
-| [developer-portal](https://github.com/kadras-io/package-for-developer-portal) | | Developer portal, based on Backstage. |
-| [envoy-gateway](https://github.com/kadras-io/package-for-envoy-gateway) | ✅ | The Gateways exposing the applications, via the Kubernetes Gateway API. |
-| [flagger](https://github.com/kadras-io/package-for-flagger) | | Progressive delivery. |
-| [flux](https://github.com/kadras-io/package-for-flux) | ✅ | GitOps. |
-| [gateway-api](https://github.com/kadras-io/package-for-gateway-api) | ✅ | The Kubernetes Gateway API CRDs. |
-| [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | | GitOps configuration of the cluster, via Flux. |
-| [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | ✅ | Serverless runtime for applications. |
-| [kyverno](https://github.com/kadras-io/package-for-kyverno) | | Policies, like the verification of image signatures. |
-| [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | | Container resource metrics, for autoscaling. |
-| [opentelemetry-operator](https://github.com/kadras-io/package-for-opentelemetry-operator) | | OpenTelemetry collectors and auto-instrumentation. |
-| [postgresql-operator](https://github.com/kadras-io/package-for-postgresql-operator) | | PostgreSQL databases, via CloudNativePG. |
-| [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | | RabbitMQ message brokers. |
-| [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | ✅ | Secrets generation and sharing across namespaces. |
-| [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | ✅ | Namespaces configured as workspaces for the platform users. |
+| [cert-manager](https://github.com/kadras-io/package-for-cert-manager) | ✅ | [cert-manager](https://cert-manager.io), to issue and renew the TLS certificates of the platform and the applications, from a private CA or Let's Encrypt. |
+| [cert-manager-webhook-hetzner](https://github.com/kadras-io/package-for-cert-manager-webhook-hetzner) | | A cert-manager webhook for [Hetzner DNS](https://www.hetzner.com/dns-console), to solve the DNS-01 challenges required by Let's Encrypt wildcard certificates. |
+| [crossplane](https://github.com/kadras-io/package-for-crossplane) | | [Crossplane](https://www.crossplane.io), to provision and manage cloud infrastructure and services via Kubernetes APIs. |
+| [dependency-track](https://github.com/kadras-io/package-for-dependency-track) | | [OWASP Dependency-Track](https://dependencytrack.org), to analyze the SBOMs of the applications and track the risks in their software supply chain. |
+| [developer-portal](https://github.com/kadras-io/package-for-developer-portal) | | A developer portal based on [Backstage](https://backstage.io), to discover and manage the applications and the platform services. |
+| [envoy-gateway](https://github.com/kadras-io/package-for-envoy-gateway) | ✅ | [Envoy Gateway](https://gateway.envoyproxy.io), to expose the applications outside the cluster via the Kubernetes Gateway API, with HTTPS terminated on the Gateway. |
+| [flagger](https://github.com/kadras-io/package-for-flagger) | | [Flagger](https://flagger.app), to release new versions of the applications progressively, with canary and blue/green deployments. |
+| [flux](https://github.com/kadras-io/package-for-flux) | ✅ | [Flux](https://fluxcd.io), to deploy the applications and keep the cluster in sync with the configuration stored in Git repositories and OCI artifacts. |
+| [gateway-api](https://github.com/kadras-io/package-for-gateway-api) | ✅ | The [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io) CRDs, to route the traffic to the applications, shared by Envoy Gateway, cert-manager, and Knative Serving. |
+| [gitops-configurer](https://github.com/kadras-io/gitops-configurer) | | A Flux configuration, to keep the whole cluster in sync with a Git repository or an OCI artifact. |
+| [knative-serving](https://github.com/kadras-io/package-for-knative-serving) | ✅ | [Knative Serving](https://knative.dev), to run the applications as serverless containers, with request-driven autoscaling down to zero. |
+| [kyverno](https://github.com/kadras-io/package-for-kyverno) | | [Kyverno](https://kyverno.io), to enforce policies on the cluster resources, like the verification of the image signatures of the platform packages. |
+| [metrics-server](https://github.com/kadras-io/package-for-metrics-server) | | [Metrics Server](https://github.com/kubernetes-sigs/metrics-server), to collect the CPU and memory usage of the containers, for the horizontal autoscaling of the workloads. |
+| [opentelemetry-operator](https://github.com/kadras-io/package-for-opentelemetry-operator) | | The [OpenTelemetry Operator](https://opentelemetry.io/docs/platforms/kubernetes/operator), to run OpenTelemetry collectors and auto-instrument the applications. |
+| [postgresql-operator](https://github.com/kadras-io/package-for-postgresql-operator) | | [CloudNativePG](https://cloudnative-pg.io), to provision and manage PostgreSQL databases for the applications. |
+| [rabbitmq-operator](https://github.com/kadras-io/package-for-rabbitmq-operator) | | The [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview), to provision and manage RabbitMQ message brokers for the applications. |
+| [secretgen-controller](https://github.com/kadras-io/package-for-secretgen-controller) | ✅ | [secretgen-controller](https://github.com/carvel-dev/secretgen-controller), to generate Secrets and share them across namespaces, like the registry credentials of the workspaces. |
+| [workspace-provisioner](https://github.com/kadras-io/workspace-provisioner) | ✅ | Workspaces for the platform users: namespaces with access control, credentials, and a Pod Security Standard. |
 
 ## 🚀&nbsp; Getting Started
 
