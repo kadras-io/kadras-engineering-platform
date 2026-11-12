@@ -1,5 +1,5 @@
 ---
-# All the default packages are installed.
+# All the default packages are installed, and the workspace is accessible.
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 commands:
@@ -7,6 +7,11 @@ commands:
       kubectl wait --for=condition=ReconcileSucceeded --timeout=60s -n kadras-system \
         packageinstall/gateway-api packageinstall/cert-manager packageinstall/envoy-gateway packageinstall/knative-serving \
         packageinstall/flux packageinstall/secretgen-controller packageinstall/workspace-provisioner
+  # The workspace members and the GitOps ServiceAccount use the Kubernetes default roles, extended by the platform packages.
+  - script: test "$(kubectl auth can-i create services.serving.knative.dev -n apps --as=developer)" = yes
+  - script: test "$(kubectl auth can-i create httproutes.gateway.networking.k8s.io -n apps --as=developer)" = yes
+  - script: test "$(kubectl auth can-i create gateways.gateway.networking.k8s.io -n apps --as=developer)" = no
+  - script: test "$(kubectl auth can-i create httproutes.gateway.networking.k8s.io -n apps --as=system:serviceaccount:apps:gitops-reconciler)" = yes
 ---
 # The workspace enforces the restricted Pod Security Standard.
 apiVersion: v1

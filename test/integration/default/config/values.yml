@@ -9,3 +9,7 @@ stringData:
     profile: local
     workspaces:
       - name: apps
+        members:
+          - kind: User
+            name: developer
+            role: edit

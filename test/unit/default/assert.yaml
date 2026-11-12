@@ -9,7 +9,7 @@ spec:
   packageRef:
     refName: gateway-api.packages.kadras.io
     versionSelection:
-      constraints: 1.6.1
+      constraints: 1.6.1+kadras.1
   (values == null): true
 ---
 apiVersion: packaging.carvel.dev/v1alpha1
@@ -103,8 +103,21 @@ stringData:
   (parse_yaml("values.yaml")):
     namespaces: []
 ---
+# kapp-controller installs the packages with the cluster-admin role, since they create cluster-wide resources.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: kadras-install-sa
   namespace: kadras-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kadras-install-cluster-admin
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kadras-install-sa
+    namespace: kadras-system

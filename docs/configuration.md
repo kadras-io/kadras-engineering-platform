@@ -62,6 +62,22 @@ workspaces:
     pod_security: baseline
 ```
 
+### Access
+
+The access to the workspaces is granted only via the Kubernetes [default roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles), bound in each namespace: `admin`, `edit`, and `view`. Each platform package extends them with the permissions on its own resources, so that, for example, the members with the `edit` role manage Knative Services, HTTPRoutes, PostgreSQL clusters, and Flux Kustomizations in their workspaces. The GitOps tools deploy the workloads with the `gitops-reconciler` ServiceAccount of each workspace, bound to the `admin` role.
+
+The resources affecting the infrastructure shared by all the workspaces are read-only, like the Gateways and the Envoy Gateway extensions running code in the shared proxies, and so are the cluster-scoped resources, like ClusterIssuers. Check the `docs/rbac.md` file of each package for the details, like the [Gateway API](https://github.com/kadras-io/package-for-gateway-api/blob/main/docs/rbac.md) and [Envoy Gateway](https://github.com/kadras-io/package-for-envoy-gateway/blob/main/docs/rbac.md) ones.
+
+| Role | Permissions in the workspace |
+|------|------------------------------|
+| `admin` | Manage the workloads and the platform resources, and the access to the workspace. |
+| `edit` | Manage the workloads and the platform resources. |
+| `view` | Read the workloads and the platform resources, except Secrets. |
+
+To grant more permissions to a team, like managing its own Gateways, bind an additional role in its workspace.
+
+### Credentials
+
 The credentials shared with the workspaces are configured in the Workspace Provisioner section. See [credentials](https://github.com/kadras-io/workspace-provisioner/blob/main/docs/credentials.md).
 
 ```yaml
@@ -72,7 +88,9 @@ workspace_provisioner:
       namespace: kadras-system
 ```
 
-Knative Serving is configured to set the secure defaults required by the `restricted` Pod Security Standard on the Knative Services that don't set them (`secure-pod-defaults`). Other workloads must set them explicitly.
+### Pod Security
+
+The workspaces enforce the `restricted` Pod Security Standard by default. Knative Serving is configured to set the secure defaults it requires on the Knative Services that don't set them (`secure-pod-defaults`), except for the user: images that run as root by default need a non-root user (`runAsUser`). Other workloads must set them explicitly.
 
 ## Shared settings
 
