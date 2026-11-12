@@ -38,6 +38,7 @@
 profile: run
 
 #@schema/desc "The namespace where the PackageInstalls of the platform packages are created. The packages deploy their workloads in their own namespaces."
+#@schema/validation ("a valid DNS label", is_dns_label)
 namespace: kadras-system
 
 #! =============================================

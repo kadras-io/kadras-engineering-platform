@@ -11,7 +11,7 @@ ingress:
   domain: example.com
 ```
 
-Each workspace gets its own wildcard certificate (`*.<workspace>.<domain>`), since Knative Services are served as `<name>.<workspace>.<domain>`, and a wildcard certificate only covers one level of subdomains. Other applications, like Dependency Track (`dependency-track.<domain>`), are served on a subdomain of the base domain.
+Each workspace gets its own wildcard certificate (`*.<workspace>.<domain>`), since Knative Services are served as `<name>.<workspace>.<domain>`, and a wildcard certificate only covers one level of subdomains. Knative Services in namespaces that aren't workspaces get an HTTPS URL too, but the Gateway has no certificate for it: deploy the applications in workspaces. Other applications, like Dependency Track (`dependency-track.<domain>`), are served on a subdomain of the base domain.
 
 | Workspace | Knative Service | URL |
 |-----------|-----------------|-----|

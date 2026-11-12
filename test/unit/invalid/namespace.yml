@@ -1,0 +1,3 @@
+# expected: a valid DNS label
+---
+namespace: Kadras_System

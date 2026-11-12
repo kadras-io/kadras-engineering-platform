@@ -27,7 +27,7 @@ packages = [
   _package("flagger", "flagger", "1.45.0+kadras.1", after=["envoy-gateway", "knative-serving", "kyverno"]),
   _package("flux", "flux", "2.10.0", default=True, after=["kyverno"]),
   _package("gateway-api", None, "1.6.1+kadras.1", default=True),
-  _package("gitops-configurer", "gitops_configurer", "0.4.0", requires=["flux"], after=["cert-manager", "crossplane", "envoy-gateway", "knative-serving", "kyverno", "postgresql-operator", "rabbitmq-operator", "workspace-provisioner"]),
+  _package("gitops-configurer", "gitops_configurer", "0.4.0", requires=["flux"], after=["cert-manager", "crossplane", "envoy-gateway", "flagger", "knative-serving", "kyverno", "opentelemetry-operator", "postgresql-operator", "rabbitmq-operator", "workspace-provisioner"]),
   _package("knative-serving", "knative_serving", "1.24.0", default=True, requires=["envoy-gateway"], after=["cert-manager", "kyverno"]),
   _package("kyverno", "kyverno", "1.19.2+kadras.1"),
   _package("metrics-server", "metrics_server", "0.9.1+kadras.1", after=["kyverno"]),

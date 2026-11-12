@@ -120,7 +120,7 @@ tasks:
         rendered=$(mktemp)
         schemas=$(mktemp -d)
         trap 'rm -rf "$rendered" "$schemas"' EXIT
-        # The custom resources (NamespacedImageValidatingPolicy...) are validated against the schemas from the CRDs catalog.
+        # The custom resources, like the PackageInstalls, are validated against the schemas from the CRDs catalog, when available.
         # The braces are escaped from the Task templating.
         crds_catalog='https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{"{{"}}.Group}}/{{"{{"}}.ResourceKind}}_{{"{{"}}.ResourceAPIVersion}}.json'
         for values in test/unit/*/values.yml; do
